@@ -4,27 +4,120 @@
 
 :root {
   /* Fallbacks en triplete "R G B". El layout inyecta los valores reales del theme (Forja). */
-  --primary: 195 245 60;
-  --accent: 255 122 26;
-  --bg: 13 15 18;
-  --surface: 23 26 31;
-  --fg: 241 243 245;
-  --muted: 139 147 157;
-  --border: 39 44 52;
-  --subtle: 31 36 43;
-  --success: 52 211 153;
-  --warning: 251 191 36;
-  --danger: 251 113 133;
-  --info: 56 189 248;
-  --radius: 14px;
-  --pad: 20px;
-  --font-heading: Inter, system-ui, sans-serif;
-  --font-body: Inter, system-ui, sans-serif;
+  --primary: 37 71 230;
+  --accent: 198 242 78;
+  --bg: 11 14 19;
+  --surface: 21 27 36;
+  --fg: 232 237 245;
+  --muted: 126 138 156;
+  --border: 36 45 59;
+  --subtle: 26 33 43;
+  --success: 45 212 191;
+  --warning: 198 242 78;
+  --danger: 236 59 138;
+  --info: 34 211 238;
+  --radius: 4px;
+  --pad: 12px;
+  --badge-radius: 9999px;
+  --card-border: 1px solid rgb(var(--border));
+  --font-heading: system-ui, sans-serif;
+  --font-body: ui-monospace, monospace;
+  --font-number: ui-monospace, monospace;
 
-  /* Sistema de elevacion tech en oscuro: la sombra hunde, el borde separa. */
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
-  --shadow-card: 0 1px 3px rgb(0 0 0 / 0.45), 0 8px 24px rgb(0 0 0 / 0.35);
-  --shadow-pop: 0 2px 6px rgb(0 0 0 / 0.5), 0 18px 40px rgb(0 0 0 / 0.45);
+  --shadow-card: none;
+  --shadow-pop: 0 1px 2px rgb(0 0 0 / 0.4);
+}
+
+/* La scrollbar es parte del diseño, no un accidente del navegador.
+   Importa en el timeline de la agenda y en la tabla densa de socios. */
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--border)) transparent;
+  }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(var(--border));
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--primary) / 0.7);
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-corner { background: transparent; }
+}
+
+@layer components {
+  .surface-card {
+    background: rgb(var(--surface));
+    border-radius: calc(var(--radius) + 2px);
+    box-shadow: var(--shadow-card);
+    border: var(--card-border);
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    border-radius: var(--badge-radius);
+    padding: 0.125rem 0.625rem;
+    font-size: 0.7rem;
+    line-height: 1.2rem;
+    white-space: nowrap;
+    font-family: var(--font-body);
+  }
+  /* El dato: todo numero de telemetria (aforo, kg, %, MRR) va en mono tabular. */
+  .dato {
+    font-family: var(--font-number);
+    font-variant-numeric: tabular-nums;
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+  }
+  /* Barra de aforo: el relleno crece con el %. La transicion es el momento del clip. */
+  .barra {
+    position: relative;
+    overflow: hidden;
+    background: rgb(var(--subtle));
+    border-radius: 2px;
+  }
+  .barra-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+/* Una clase COMPLETA late en magenta: es el frame que se graba. */
+@keyframes latir {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(var(--danger) / 0.55); }
+  50% { box-shadow: 0 0 0 8px rgb(var(--danger) / 0); }
+}
+.completa { animation: latir 1.4s ease-out infinite; }
+
+/* El hero-number de aforo respira: la sala esta viva ahora. */
+@keyframes respirar {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.72; }
+}
+.respira { animation: respirar 2.4s ease-in-out infinite; }
+
+/* El ticker de telemetria corre solo. */
+@keyframes correr {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: correr 34s linear infinite;
+}
+.ticker-mask:hover .ticker-track { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+  .completa, .respira, .ticker-track, .barra-fill { animation: none; transition: none; }
 }
 
 html {
@@ -32,4 +125,4 @@ html {
   text-rendering: optimizeLegibility;
 }
 body { font-family: var(--font-body); }
-h1, h2, h3 { letter-spacing: -0.012em; }
+h1, h2, h3 { font-family: var(--font-heading); letter-spacing: -0.01em; }

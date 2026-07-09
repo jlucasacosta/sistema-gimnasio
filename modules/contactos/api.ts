@@ -1,49 +1,56 @@
-// PATRON MOCK. Misma firma que la query real. Reetiquetado para gimnasio.
-// Datos ficticios con forma realista: emails de patron VARIADO (ver CLAUDE.md §8),
-// telefonos AR con prefijos de distintas ciudades.
-export type Contact = {
-  id: string
-  name: string
-  phone: string
-  email: string
-  plan: string
-  status: "al dia" | "nuevo" | "por vencer" | "vencido"
-}
+// PATRON MOCK. Misma firma que la query real. Ver BACKEND.md.
+// CONTACTOS (socios) = el roster. Recepcion escanea/ordena cientos de socios
+// por estado y vencimiento. Tabla densa + barra de busqueda dominante arriba.
+// Emails 100% ficticios, patron VARIADO (5 proveedores). Telefonos variados.
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
-export async function getContacts(): Promise<Contact[]> {
+export type EstadoSocio = "activo" | "por-vencer" | "vencido" | "congelado"
+
+export type Socio = {
+  id: string
+  nombre: string
+  documento: string
+  plan: string
+  estado: EstadoSocio
+  ultimoCheckin: string
+  vencimiento: string
+  email: string
+  telefono: string
+}
+
+export async function getSocios(): Promise<Socio[]> {
   await sleep(300)
   return [
-    { id: "1", name: "Camila Duarte", phone: "+54 9 11 4783-2610", email: "camila.duarte@gmail.com", plan: "Full Anual", status: "al dia" },
-    { id: "2", name: "Joaquin Bentancor", phone: "+54 9 11 6294-1187", email: "jbentancor@outlook.com", plan: "Musculacion mensual", status: "al dia" },
-    { id: "3", name: "Renata Villalba", phone: "+54 9 11 3126-8074", email: "villalba.renata@hotmail.com", plan: "Full mensual", status: "al dia" },
-    { id: "4", name: "Facundo Ibarra", phone: "+54 9 11 5840-3962", email: "facu.ibarra90@gmail.com", plan: "Pase libre trimestral", status: "nuevo" },
-    { id: "5", name: "Milena Sarti", phone: "+54 9 11 2957-6431", email: "milena_sarti@yahoo.com", plan: "Clases 8 sesiones", status: "nuevo" },
-    { id: "6", name: "Tomas Escalante", phone: "+54 9 11 7013-5528", email: "tomiescalante88@gmail.com", plan: "Full mensual", status: "vencido" },
-    { id: "7", name: "Ariadna Pesce", phone: "+54 9 11 4406-9173", email: "ari_pesce23@hotmail.com", plan: "Musculacion mensual", status: "vencido" },
-    { id: "8", name: "Bruno Lattanzio", phone: "+54 9 11 6672-2049", email: "brunolattanzio@gmail.com", plan: "Full mensual", status: "al dia" },
-    { id: "9", name: "Selena Ojeda", phone: "+54 9 11 3390-7715", email: "sojeda.fit@gmail.com", plan: "Clases 8 sesiones", status: "nuevo" },
-    { id: "10", name: "Priscila Godoy", phone: "+54 9 11 5217-4486", email: "pris.godoy@outlook.com", plan: "Full Anual", status: "al dia" },
-    { id: "11", name: "Nahuel Zabala", phone: "+54 9 351 620-1934", email: "nzabala94@hotmail.com", plan: "Musculacion mensual", status: "por vencer" },
-    { id: "12", name: "Ivana Cardozo", phone: "+54 9 11 8842-3057", email: "cardozo.ivana@gmail.com", plan: "Pase libre trimestral", status: "por vencer" },
-    { id: "13", name: "Gaston Uriarte", phone: "+54 9 11 4550-7268", email: "guriarte@outlook.com", plan: "Full mensual", status: "al dia" },
-    { id: "14", name: "Delfina Roldan", phone: "+54 9 11 6134-8890", email: "delfi.roldan@gmail.com", plan: "Clases 8 sesiones", status: "al dia" },
-    { id: "15", name: "Ramiro Aguirre", phone: "+54 9 341 902-6614", email: "ramiroaguirre77@yahoo.com", plan: "Musculacion mensual", status: "al dia" },
-    { id: "16", name: "Ludmila Ferrari", phone: "+54 9 11 2117-4903", email: "lu_ferrari@gmail.com", plan: "Full mensual", status: "al dia" },
-    { id: "17", name: "Emanuel Prieto", phone: "+54 9 11 7446-2085", email: "prieto.emanuel@hotmail.com", plan: "Full Anual", status: "al dia" },
-    { id: "18", name: "Sofia Maidana", phone: "+54 9 11 3852-6640", email: "sofimaidana@gmail.com", plan: "Clases 8 sesiones", status: "por vencer" },
-    { id: "19", name: "Alan Corvalan", phone: "+54 9 11 5739-1264", email: "acorvalan@outlook.com", plan: "Musculacion mensual", status: "al dia" },
-    { id: "20", name: "Julieta Naranjo", phone: "+54 9 11 2965-8317", email: "juli.naranjo01@gmail.com", plan: "Pase libre trimestral", status: "nuevo" },
-    { id: "21", name: "Ezequiel Barrios", phone: "+54 9 11 6708-4429", email: "eze_barrios@yahoo.com", plan: "Full mensual", status: "al dia" },
-    { id: "22", name: "Mora Cantero", phone: "+54 9 11 5240-9976", email: "moracantero@gmail.com", plan: "Musculacion mensual", status: "vencido" },
-    { id: "23", name: "Ignacio Rivarola", phone: "+54 9 261 801-7352", email: "nacho.rivarola@hotmail.com", plan: "Full Anual", status: "al dia" },
-    { id: "24", name: "Abril Sanguinetti", phone: "+54 9 11 3623-5108", email: "asanguinetti@gmail.com", plan: "Clases 8 sesiones", status: "nuevo" },
-    { id: "25", name: "Lisandro Moyano", phone: "+54 9 11 9584-2731", email: "lisandro.moyano@gmail.com", plan: "Full mensual", status: "al dia" },
-    { id: "26", name: "Guadalupe Tessa", phone: "+54 9 11 1439-6650", email: "guada_tessa@outlook.com", plan: "Musculacion mensual", status: "por vencer" },
-    { id: "27", name: "Benicio Lauria", phone: "+54 9 11 7062-3384", email: "benilauria@gmail.com", plan: "Pase libre trimestral", status: "al dia" },
-    { id: "28", name: "Antonella Prado", phone: "+54 9 11 2851-9047", email: "prado.antonella@hotmail.com", plan: "Full mensual", status: "al dia" },
-    { id: "29", name: "Valentin Ocampo", phone: "+54 9 11 6395-1720", email: "vocampo85@yahoo.com", plan: "Clases 8 sesiones", status: "vencido" },
-    { id: "30", name: "Micaela Sandoval", phone: "+54 9 11 4718-8562", email: "mica.sandoval@gmail.com", plan: "Full Anual", status: "al dia" },
+    { id: "S-201", nombre: "Agustina Real", documento: "38.204.117", plan: "Full Anual", estado: "vencido", ultimoCheckin: "hace 8d", vencimiento: "02 jul", email: "agustina.real@gmail.com", telefono: "+54 9 351 418 2093" },
+    { id: "S-202", nombre: "Federico Nunes", documento: "40.117.882", plan: "Full Mensual", estado: "vencido", ultimoCheckin: "hace 5d", vencimiento: "06 jul", email: "fnunes82@mail.com", telefono: "+54 9 11 6274 3319" },
+    { id: "S-203", nombre: "Camila Ordonez", documento: "37.556.201", plan: "Class Pass 12", estado: "por-vencer", ultimoCheckin: "ayer", vencimiento: "10 jul", email: "cami.ordonez@outlook.com", telefono: "+54 9 261 553 7742" },
+    { id: "S-204", nombre: "Ramiro Escalante", documento: "35.882.410", plan: "Premium Trim.", estado: "por-vencer", ultimoCheckin: "hoy", vencimiento: "11 jul", email: "r.escalante@proton.me", telefono: "+54 9 341 209 6650" },
+    { id: "S-205", nombre: "Yamila Prado", documento: "41.330.775", plan: "Full Mensual", estado: "por-vencer", ultimoCheckin: "hoy", vencimiento: "13 jul", email: "yamila_prado@ejemplo.com", telefono: "+54 9 223 447 1108" },
+    { id: "S-206", nombre: "Ezequiel Toledo", documento: "39.771.028", plan: "Estudiante", estado: "por-vencer", ultimoCheckin: "hace 2d", vencimiento: "14 jul", email: "eze.toledo@gmail.com", telefono: "+54 9 381 662 5540" },
+    { id: "S-207", nombre: "Brenda Salcedo", documento: "36.019.554", plan: "Full Anual", estado: "activo", ultimoCheckin: "hoy", vencimiento: "18 jul", email: "bsalcedo@mail.com", telefono: "+54 9 299 314 8827" },
+    { id: "S-208", nombre: "Ignacio Bravo", documento: "34.771.903", plan: "Pase Libre", estado: "activo", ultimoCheckin: "ayer", vencimiento: "20 jul", email: "nacho.bravo@outlook.com", telefono: "+54 9 11 5583 2076" },
+    { id: "S-209", nombre: "Rocio Miranda", documento: "42.008.661", plan: "Class Pass 8", estado: "vencido", ultimoCheckin: "hace 11d", vencimiento: "08 jul", email: "rocio.miranda@ejemplo.com", telefono: "+54 9 351 774 3391" },
+    { id: "S-210", nombre: "Tobias Herrero", documento: "38.665.012", plan: "Full Mensual", estado: "activo", ultimoCheckin: "hoy", vencimiento: "23 jul", email: "t.herrero@proton.me", telefono: "+54 9 264 401 9928" },
+    { id: "S-211", nombre: "Malena Ibarra", documento: "37.220.884", plan: "Congelado", estado: "congelado", ultimoCheckin: "hace 24d", vencimiento: "29 jul", email: "malena.ibarra@gmail.com", telefono: "+54 9 387 553 6614" },
+    { id: "S-212", nombre: "Franco Aldao", documento: "35.110.447", plan: "Premium Trim.", estado: "por-vencer", ultimoCheckin: "hoy", vencimiento: "12 jul", email: "franco.aldao@mail.com", telefono: "+54 9 341 668 2203" },
+    { id: "S-213", nombre: "Josefina Luro", documento: "40.552.019", plan: "Full Anual", estado: "activo", ultimoCheckin: "ayer", vencimiento: "31 jul", email: "jose.luro@outlook.com", telefono: "+54 9 11 4429 7735" },
+    { id: "S-214", nombre: "Damian Correa", documento: "33.994.208", plan: "Class Pass 12", estado: "vencido", ultimoCheckin: "hace 14d", vencimiento: "01 jul", email: "dami.correa@ejemplo.com", telefono: "+54 9 221 336 8850" },
+    { id: "S-215", nombre: "Antonella Vidal", documento: "41.887.335", plan: "Full Mensual", estado: "por-vencer", ultimoCheckin: "hoy", vencimiento: "15 jul", email: "anto.vidal@gmail.com", telefono: "+54 9 358 220 4471" },
+    { id: "S-216", nombre: "Lautaro Peralta", documento: "38.031.776", plan: "Estudiante", estado: "activo", ultimoCheckin: "hoy", vencimiento: "26 jul", email: "lautaro.peralta@proton.me", telefono: "+54 9 299 667 1152" },
+    { id: "S-217", nombre: "Sabrina Godoy", documento: "36.774.550", plan: "Pase Libre", estado: "por-vencer", ultimoCheckin: "ayer", vencimiento: "11 jul", email: "sabri.godoy@mail.com", telefono: "+54 9 351 903 6628" },
+    { id: "S-218", nombre: "Matias Rivas", documento: "34.220.991", plan: "Full Mensual", estado: "vencido", ultimoCheckin: "hace 19d", vencimiento: "27 jun", email: "matias.rivas@outlook.com", telefono: "+54 9 11 6612 0084" },
+    { id: "S-219", nombre: "Guadalupe Sena", documento: "42.551.107", plan: "Congelado", estado: "congelado", ultimoCheckin: "hace 31d", vencimiento: "08 ago", email: "guada.sena@ejemplo.com", telefono: "+54 9 261 774 3390" },
+    { id: "S-220", nombre: "Nicolas Almada", documento: "37.009.663", plan: "Full Anual", estado: "activo", ultimoCheckin: "hoy", vencimiento: "05 ago", email: "nico.almada@gmail.com", telefono: "+54 9 381 220 7716" },
+    { id: "S-221", nombre: "Paula Cabrera", documento: "39.446.208", plan: "Class Pass 8", estado: "activo", ultimoCheckin: "ayer", vencimiento: "17 jul", email: "paula.cabrera@proton.me", telefono: "+54 9 341 558 9903" },
+    { id: "S-222", nombre: "Emiliano Duarte", documento: "35.667.114", plan: "Premium Trim.", estado: "por-vencer", ultimoCheckin: "hace 3d", vencimiento: "10 jul", email: "emi.duarte@mail.com", telefono: "+54 9 223 990 4417" },
+    { id: "S-223", nombre: "Victoria Lascano", documento: "40.880.552", plan: "Full Mensual", estado: "activo", ultimoCheckin: "hoy", vencimiento: "21 jul", email: "vicky.lascano@outlook.com", telefono: "+54 9 11 5074 6628" },
+    { id: "S-224", nombre: "Santiago Ferreyra", documento: "33.771.209", plan: "Pase Libre", estado: "vencido", ultimoCheckin: "hace 9d", vencimiento: "07 jul", email: "santi.ferreyra@ejemplo.com", telefono: "+54 9 351 447 2295" },
+    { id: "S-225", nombre: "Milagros Quinteros", documento: "41.552.880", plan: "Estudiante", estado: "activo", ultimoCheckin: "ayer", vencimiento: "28 jul", email: "mili.quinteros@gmail.com", telefono: "+54 9 387 220 6613" },
+    { id: "S-226", nombre: "Joaquin Bustos", documento: "36.330.774", plan: "Full Anual", estado: "por-vencer", ultimoCheckin: "hoy", vencimiento: "12 jul", email: "joaco.bustos@proton.me", telefono: "+54 9 264 668 1140" },
+    { id: "S-227", nombre: "Carla Montenegro", documento: "38.997.201", plan: "Class Pass 12", estado: "activo", ultimoCheckin: "hoy", vencimiento: "24 jul", email: "carla.mont@mail.com", telefono: "+54 9 341 003 7729" },
+    { id: "S-228", nombre: "Bautista Leiva", documento: "39.118.665", plan: "Full Mensual", estado: "activo", ultimoCheckin: "ayer", vencimiento: "16 jul", email: "bauti.leiva@outlook.com", telefono: "+54 9 299 774 2208" },
+    { id: "S-229", nombre: "Renata Ojeda", documento: "42.330.117", plan: "Class Pass 8", estado: "por-vencer", ultimoCheckin: "hace 4d", vencimiento: "13 jul", email: "renata.ojeda@ejemplo.com", telefono: "+54 9 351 668 9930" },
+    { id: "S-230", nombre: "Gonzalo Pereda", documento: "34.556.882", plan: "Pase Libre", estado: "activo", ultimoCheckin: "hoy", vencimiento: "02 ago", email: "gonza.pereda@gmail.com", telefono: "+54 9 11 6290 4471" },
   ]
 }

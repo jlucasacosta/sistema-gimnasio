@@ -37,6 +37,7 @@ export default {
       fontFamily: {
         heading: "var(--font-heading)",
         body: "var(--font-body)",
+        number: "var(--font-number)",
       },
     },
   },
