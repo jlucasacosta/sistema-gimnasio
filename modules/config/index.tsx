@@ -57,13 +57,13 @@ export function ConfigPage() {
           <Fila label="Chips" value={theme.badge} />
         </Seccion>
 
-        <Seccion titulo="Aforo (dominio)">
+        <Seccion titulo="Ocupacion (dominio)">
           <Fila label="Umbral casi lleno" value={`${Math.round(theme.aforo.casi * 100)}%`} />
           <Fila label="Umbral completo" value={`${Math.round(theme.aforo.lleno * 100)}%`} />
           <Fila label="Meta check-ins / dia" value={String(theme.checkinObjetivo)} />
           <Fila label="Capacidad del club" value={String(theme.cupoClub)} />
           <p className="pt-2 text-xs text-muted">
-            El Termometro de Cupos se pinta con estos umbrales. Cambia "completo" y toda la app cambia cuando se pone en magenta.
+            La Ocupacion de clases se pinta con estos umbrales. Cambia "completo" y toda la app cambia cuando se pone en magenta.
           </p>
         </Seccion>
 

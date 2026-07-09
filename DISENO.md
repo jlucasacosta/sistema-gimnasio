@@ -45,8 +45,8 @@ Recepción en hora pico (6-9h y 18-22h). Cola de socios entrando, mochila al hom
 
 | Módulo | Arquetipo | Componentes, tamaños, qué se ve |
 |---|---|---|
-| **dashboard** | **board** | Comando de recepción. Hero-number de aforo del club gigante ("84/120" en IBM Plex Mono, latiendo) arriba; debajo el **Termómetro de Cupos** full-width (estrella); sparkline línea-área de ocupación por hora con marcador "ahora". Sin la fila de 4 stat-tiles (eliminada). |
-| **agenda (clases)** | **timeline** | *"Riel de clases de hoy"*: sesiones apiladas como FILAS ordenadas por hora. Cada fila: hora en mono, nombre de clase (Space Grotesk), coach, chip de estado, y una **barra de cupo gorda (24px+)** con contador hero "16/20". Es la pantalla que manda. Ordena por HORA pero el ojo lee LLENADO. Único: nadie más apila filas de aforo. |
+| **dashboard** | **board** | Comando de recepción. Hero-number de aforo del club gigante ("84/120" en IBM Plex Mono, latiendo) arriba; debajo el **Ocupacion de clases** full-width (estrella); sparkline línea-área de ocupación por hora con marcador "ahora". Sin la fila de 4 stat-tiles (eliminada). |
+| **agenda (clases)** | **timeline** | *"Clases de hoy"*: sesiones apiladas como FILAS ordenadas por hora. Cada fila: hora en mono, nombre de clase (Space Grotesk), coach, chip de estado, y una **barra de cupo gorda (24px+)** con contador hero "16/20". Es la pantalla que manda. Ordena por HORA pero el ojo lee LLENADO. Único: nadie más apila filas de aforo. |
 | **ventas (membresías)** | **lista-ticket** *(VETO aplicado: era kanban)* | Cola de vencimientos y recupero de morosos. Lista densa tipo bandeja: cada ticket = socio + plan + días para vencer + chip (Activo / Por vencer / Vencido / Congelado) + monto MRR en mono. Ordenable por urgencia. Saca el clon de barbería (que usa kanban) y da el 2º pairing único. |
 | **contactos (socios)** | **tabla-densa** | Roster. Recepción escanea/ordena cientos de socios por estado y vencimiento. Columnas compactas: nombre, plan, estado (pill), último check-in, vencimiento. Barra-búsqueda dominante arriba para encontrar al socio al instante. |
 | **conversaciones** | **master-detail** | Lista de hilos a la izquierda, conversación abierta a la derecha. Base; alimenta, no gobierna. |
@@ -59,7 +59,7 @@ Recepción en hora pico (6-9h y 18-22h). Cola de socios entrando, mochila al hom
 - **ICONOS = lucide-fino** — línea atlética; distinto del vecino barbería (sin-iconos).
 - **ESTRUCTURA = barra-búsqueda-dominante** — buscar socio al instante en mostrador es el gesto #1.
 
-## 8. Componente estrella — "Termómetro de Cupos"
+## 8. Componente estrella — "Ocupacion de clases"
 
 *(VETO aplicado: reemplaza al "Pulso de Sala"/mapa-SVG, que colisionaba con el Mapa de Cartera de inmobiliaria — firma reservada de ese nicho.)*
 
@@ -74,7 +74,7 @@ Panel full-width en el dashboard (y es el corazón visual de la agenda). **Barra
 
 ## 9. Componente eliminado
 
-**La fila de stat-tiles 4-up del dashboard.** En un gym la única métrica "ahora" es el aforo; la grilla de cuatro tarjetitas era ruido. Se reemplaza por hero-number (aforo del club) + Termómetro de Cupos.
+**La fila de stat-tiles 4-up del dashboard.** En un gym la única métrica "ahora" es el aforo; la grilla de cuatro tarjetitas era ruido. Se reemplaza por hero-number (aforo del club) + Ocupacion de clases.
 
 ## 10. Frame-firma
 
@@ -82,10 +82,10 @@ Barras de aforo gigantes apiladas ocupando toda la pantalla; un **"20/20 COMPLET
 
 ## 11. Veredicto
 
-**VETADO → CORREGIDO.** Se aplicaron los dos fixes del Abogado del Diablo: (1) estrella pasa de *mapa Pulso-de-Sala* a **Termómetro de Cupos** (barras de aforo), eliminando la colisión de firma con el Mapa de Cartera de inmobiliaria; (2) **ventas** pasa de *kanban* a **lista-ticket**, sacando el clon de barbería y sumando el 2º arquetipo de datos único exigido. Con esto: arquetipos únicos = agenda:timeline + ventas:lista-ticket; combo KPI+gráfico único (hero-number + línea-área); iconos lucide-fino ≠ barbería; estrella que nadie tiene. PIEL cumple >=3 contra cada sistema. APROBADO para codear.
+**VETADO → CORREGIDO.** Se aplicaron los dos fixes del Abogado del Diablo: (1) estrella pasa de *mapa Pulso-de-Sala* a **Ocupacion de clases** (barras de aforo), eliminando la colisión de firma con el Mapa de Cartera de inmobiliaria; (2) **ventas** pasa de *kanban* a **lista-ticket**, sacando el clon de barbería y sumando el 2º arquetipo de datos único exigido. Con esto: arquetipos únicos = agenda:timeline + ventas:lista-ticket; combo KPI+gráfico único (hero-number + línea-área); iconos lucide-fino ≠ barbería; estrella que nadie tiene. PIEL cumple >=3 contra cada sistema. APROBADO para codear.
 
 ## 12. Diferencias vs sistemas ya decididos
 
-- **vs inmobiliaria** (light/sidebar/outlined/sharp/compact/square · Fraunces/Inter · verde-tierra + terracota · Mapa de Cartera): comparte nav y varias palancas de chasis pero difiere en mode (dark), badge (pill), fuentes (Space Grotesk/IBM Plex Mono) y color (cobalto/volt frío). La firma NO es un mapa — es el Termómetro de barras; el mapa queda reservado a inmobiliaria.
-- **vs restaurante** (dark/rail/raised/round/comfortable/pill · Archivo/Manrope · brasa-ámbar): ambos dark, pero acá es dark FRÍO de acero vs caliente de brasa; difiere en nav, elevation, radius, density, fuentes y color (6 palancas). El riel del restó envejece por tiempo/temperatura; el termómetro del gym se llena por aforo.
+- **vs inmobiliaria** (light/sidebar/outlined/sharp/compact/square · Fraunces/Inter · verde-tierra + terracota · Mapa de Cartera): comparte nav y varias palancas de chasis pero difiere en mode (dark), badge (pill), fuentes (Space Grotesk/IBM Plex Mono) y color (cobalto/volt frío). La firma NO es un mapa — es la Ocupacion de clases en barras; el mapa queda reservado a inmobiliaria.
+- **vs restaurante** (dark/rail/raised/round/comfortable/pill · Archivo/Manrope · brasa-ámbar): ambos dark, pero acá es dark FRÍO de acero vs caliente de brasa; difiere en nav, elevation, radius, density, fuentes y color (6 palancas). El riel del restó envejece por tiempo/temperatura; la Ocupacion de clases del gym se llena por aforo.
 - **vs barbería** (light/topbar/flat/soft/comfortable/square · Bebas_Neue/DM_Sans · oxblood; agenda:grilla-semana, ventas:kanban): 8/8 palancas distintas. Corte de agenda: barbería encabeza COLUMNAS con personas y ordena por TIEMPO; gym apila FILAS y ordena por LLENADO. Ventas dejó de ser kanban (era clon) y pasó a lista-ticket. Iconos lucide-fino vs sin-iconos.

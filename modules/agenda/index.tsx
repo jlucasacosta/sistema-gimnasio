@@ -105,7 +105,7 @@ export function AgendaPage() {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
-        <h1 className="font-heading text-2xl font-bold uppercase tracking-tight">Riel de clases · hoy</h1>
+        <h1 className="font-heading text-2xl font-bold uppercase tracking-tight">Clases de hoy</h1>
         <div className="flex gap-2">
           <span className="chip bg-accent/15 text-accent">{clases.length} clases</span>
           <span className="chip bg-danger/15 text-danger">{completas} completas</span>

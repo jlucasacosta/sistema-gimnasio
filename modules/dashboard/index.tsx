@@ -157,7 +157,7 @@ export function DashboardPage() {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
-        <h1 className="font-heading text-2xl font-bold uppercase tracking-tight">Recepcion · en vivo</h1>
+        <h1 className="font-heading text-2xl font-bold uppercase tracking-tight">Panel general</h1>
         <span className="chip bg-accent/15 text-accent">bloque 18:00 – 19:00</span>
       </div>
 
@@ -166,7 +166,7 @@ export function DashboardPage() {
       <div className="grid gap-4 lg:grid-cols-3">
         {/* Hero-number: el aforo del club, gigante, respirando. UN numero manda. */}
         <div className="surface-card flex flex-col justify-center p-6">
-          <h2 className="font-heading text-xs font-bold uppercase tracking-widest text-muted">Aforo del club</h2>
+          <h2 className="font-heading text-xs font-bold uppercase tracking-widest text-muted">Ocupacion del club</h2>
           {aforo && (
             <>
               <div className="mt-3 flex items-baseline gap-2">
@@ -186,9 +186,9 @@ export function DashboardPage() {
         {/* COMPONENTE ESTRELLA: Termometro de Cupos */}
         <section className="surface-card p-5 lg:col-span-2">
           <header className="mb-1 flex items-baseline justify-between">
-            <h2 className="font-heading text-xs font-bold uppercase tracking-widest">Termometro de cupos</h2>
+            <h2 className="font-heading text-xs font-bold uppercase tracking-widest">Ocupacion de clases</h2>
             <span className="dato text-[11px] text-muted">
-              {completas > 0 ? `${completas} completas` : "el ojo lee el llenado"}
+              {completas > 0 ? `${completas} completas` : "sin clases completas"}
             </span>
           </header>
           <div>
