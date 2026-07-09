@@ -1,11 +1,11 @@
 // theme.ts · Forja Athletic Club (sistema gimnasio)
 // LA PALANCA DE DISEÑO. Nada se hardcodea: todo lee de aca.
-// Lenguaje visual: tech / SaaS oscuro (sala de pesas de noche).
+// Modo OSCURO (sistema par de la cola): sala de pesas de noche.
 // Color de nicho: lima electrico (energia) + naranja (esfuerzo).
-// Los 4 semanticos dan vida a estados, badges y metricas.
 
 export type Theme = {
   brand: { name: string; logo?: string }
+  mode: "light" | "dark"
   colors: {
     primary: string
     accent: string
@@ -15,7 +15,7 @@ export type Theme = {
     muted: string
     border: string
     subtle: string
-    // Semanticos: SIEMPRE los cuatro. Estados y badges leen de aca.
+    // Semanticos: estados, badges, metricas. LOS CUATRO, SIEMPRE.
     success: string
     warning: string
     danger: string
@@ -28,6 +28,7 @@ export type Theme = {
 
 export const forja: Theme = {
   brand: { name: "Forja Athletic Club" },
+  mode: "dark",
   colors: {
     primary: "#c3f53c",
     accent: "#ff7a1a",

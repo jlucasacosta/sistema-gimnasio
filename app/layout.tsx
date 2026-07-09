@@ -9,6 +9,20 @@ import { Sidebar } from "@/shell/sidebar"
 const radiusMap = { sharp: "6px", soft: "10px", round: "14px" }
 const densityMap = { compact: "12px", comfortable: "20px" }
 
+// En claro la sombra levanta (tinte slate). En oscuro hunde (negro puro).
+const shadowMap = {
+  light: {
+    sm: "0 1px 2px rgb(15 23 42 / 0.04), 0 1px 3px rgb(15 23 42 / 0.06)",
+    card: "0 1px 3px rgb(15 23 42 / 0.06), 0 6px 16px rgb(15 23 42 / 0.05)",
+    pop: "0 6px 16px rgb(15 23 42 / 0.08), 0 16px 32px rgb(15 23 42 / 0.10)",
+  },
+  dark: {
+    sm: "0 1px 2px rgb(0 0 0 / 0.4)",
+    card: "0 1px 3px rgb(0 0 0 / 0.45), 0 8px 24px rgb(0 0 0 / 0.35)",
+    pop: "0 2px 6px rgb(0 0 0 / 0.5), 0 18px 40px rgb(0 0 0 / 0.45)",
+  },
+}
+
 function rgb(hex: string) {
   const h = hex.replace("#", "")
   const full = h.length === 3 ? h.split("").map((ch) => ch + ch).join("") : h
@@ -20,6 +34,7 @@ export const metadata = { title: "Sistema", description: "Demo" }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   const c = theme.colors
+  const s = shadowMap[theme.mode]
   const vars = {
     "--primary": rgb(c.primary),
     "--accent": rgb(c.accent),
@@ -35,6 +50,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     "--info": rgb(c.info),
     "--radius": radiusMap[theme.radius],
     "--pad": densityMap[theme.density],
+    "--shadow-sm": s.sm,
+    "--shadow-card": s.card,
+    "--shadow-pop": s.pop,
     "--font-heading": theme.font.heading + ", system-ui, sans-serif",
     "--font-body": theme.font.body + ", system-ui, sans-serif",
   } as CSSProperties
