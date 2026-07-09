@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Fallbacks. El layout inyecta los valores reales del theme activo (Forja). */
+  --primary: #ccff33;
+  --accent: #ff6b35;
+  --bg: #0d0f12;
+  --surface: #171a1f;
+  --fg: #f1f3f5;
+  --muted: #868f99;
+  --border: #262b33;
+  --subtle: #1f242b;
+  --radius: 14px;
+  --pad: 20px;
+  --font-heading: Inter, system-ui, sans-serif;
+  --font-body: Inter, system-ui, sans-serif;
+
+  /* Sistema de elevacion tech en oscuro: la sombra hunde, el borde separa. */
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-card: 0 1px 3px rgb(0 0 0 / 0.45), 0 8px 24px rgb(0 0 0 / 0.35);
+  --shadow-pop: 0 2px 6px rgb(0 0 0 / 0.5), 0 18px 40px rgb(0 0 0 / 0.45);
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+body { font-family: var(--font-body); }
+h1, h2, h3 { letter-spacing: -0.012em; }
