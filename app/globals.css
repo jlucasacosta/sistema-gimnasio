@@ -3,15 +3,19 @@
 @tailwind utilities;
 
 :root {
-  /* Fallbacks. El layout inyecta los valores reales del theme activo (Forja). */
-  --primary: #ccff33;
-  --accent: #ff6b35;
-  --bg: #0d0f12;
-  --surface: #171a1f;
-  --fg: #f1f3f5;
-  --muted: #868f99;
-  --border: #262b33;
-  --subtle: #1f242b;
+  /* Fallbacks en triplete "R G B". El layout inyecta los valores reales del theme (Forja). */
+  --primary: 195 245 60;
+  --accent: 255 122 26;
+  --bg: 13 15 18;
+  --surface: 23 26 31;
+  --fg: 241 243 245;
+  --muted: 139 147 157;
+  --border: 39 44 52;
+  --subtle: 31 36 43;
+  --success: 52 211 153;
+  --warning: 251 191 36;
+  --danger: 251 113 133;
+  --info: 56 189 248;
   --radius: 14px;
   --pad: 20px;
   --font-heading: Inter, system-ui, sans-serif;
