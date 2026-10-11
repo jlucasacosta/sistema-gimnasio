@@ -99,12 +99,14 @@ export function ContactosPage() {
 
   const rows = useMemo(() => data ?? [], [data])
   const visibles = useMemo(() => {
-    const term = q.trim().toLowerCase()
+    // Sin tildes ni mayúsculas: "tomas" encuentra a "Tomás".
+    const sinTildes = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase()
+    const term = sinTildes(q.trim())
     return rows.filter((r) => {
       const okEstado = filtro === "todos" || r.estado === filtro
       const okTerm =
         term === "" ||
-        r.nombre.toLowerCase().includes(term) ||
+        sinTildes(r.nombre).includes(term) ||
         r.documento.replace(/\./g, "").includes(term.replace(/\./g, ""))
       return okEstado && okTerm
     })
