@@ -400,6 +400,9 @@ begin
   if v_estado = 'cancelada' then
     raise exception 'La clase está cancelada';
   end if;
+  if v_estado = 'finalizada' then
+    raise exception 'La clase ya terminó';
+  end if;
 
   select count(*) into v_ocupados
   from public.reservas
@@ -491,7 +494,7 @@ Qué hace cada parte, para que sepas qué estás ejecutando:
   | `staff.rol` | `admin`, `recepcion`, `coach` |
 
 - **Vistas.** Cada vista devuelve **exactamente** la forma que espera su `api.ts` (por eso las funciones casi no necesitan transformar nada). Están creadas con `security_invoker = true`: respetan la seguridad de quien las consulta.
-- **`reservar_clase`.** Bloquea la fila de la clase mientras cuenta los lugares, así dos personas reservando a la vez no pueden pasarse del cupo. Devuelve `reservada` o `lista-espera`. Se llama con `supabase.rpc('reservar_clase', { p_clase, p_socio })`.
+- **`reservar_clase`.** Bloquea la fila de la clase mientras cuenta los lugares, así dos personas reservando a la vez no pueden pasarse del cupo. Devuelve `reservada` o `lista-espera`, y rechaza las clases canceladas o ya finalizadas. Se llama con `supabase.rpc('reservar_clase', { p_clase, p_socio })`.
 - **RLS y `staff`.** Todas las tablas tienen `row level security` prendido. Sin política, **nadie** puede leer ni escribir. La política de ejemplo deja entrar solo a los usuarios que estén en la tabla `staff` (el equipo del club). Es el patrón recomendado: aunque alguien logre registrarse, no ve nada si no lo sumaste a `staff`.
 - **Zona horaria.** Las funciones `hoy_club()` e `inicio_dia_club()` calculan "hoy" según `club_config.zona_horaria` (por defecto Buenos Aires), no según el reloj del servidor, que está en UTC.
 
