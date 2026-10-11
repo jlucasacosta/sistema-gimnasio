@@ -14,7 +14,7 @@
   --subtle: 26 33 43;
   --success: 45 212 191;
   --warning: 198 242 78;
-  --danger: 236 59 138;
+  --danger: 240 96 160;
   --info: 34 211 238;
   --radius: 4px;
   --pad: 12px;
@@ -49,6 +49,13 @@
     background-clip: content-box;
   }
   ::-webkit-scrollbar-corner { background: transparent; }
+
+  /* Foco de teclado visible y consistente (WCAG 2.4.7). El lima del acento
+     da 13:1 sobre surface y sobre bg. Solo aparece con teclado. */
+  :focus-visible {
+    outline: 2px solid rgb(var(--accent));
+    outline-offset: 2px;
+  }
 }
 
 @layer components {
@@ -83,10 +90,26 @@
     background: rgb(var(--subtle));
     border-radius: 2px;
   }
+  /* El relleno se escala con transform (no con width): el salto no dispara layout.
+     El componente pasa el % como style={{ transform: "scaleX(0.8)" }}. */
   .barra-fill {
+    width: 100%;
     height: 100%;
     border-radius: 2px;
-    transition: width 700ms cubic-bezier(0.22, 1, 0.36, 1);
+    transform-origin: left center;
+    transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  /* Target tactil: en pantallas tactiles o angostas los controles llegan a 44px.
+     En desktop con mouse se conserva la densidad compacta del sistema. */
+  .tap {
+    min-height: 1.75rem;
+  }
+  @media (pointer: coarse), (max-width: 767px) {
+    .tap {
+      min-height: 2.75rem;
+      min-width: 2.75rem;
+      justify-content: center;
+    }
   }
 }
 
@@ -100,7 +123,7 @@
 /* El hero-number de aforo respira: la sala esta viva ahora. */
 @keyframes respirar {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.72; }
+  50% { opacity: 0.88; }
 }
 .respira { animation: respirar 2.4s ease-in-out infinite; }
 
@@ -114,10 +137,28 @@
   width: max-content;
   animation: correr 34s linear infinite;
 }
-.ticker-mask:hover .ticker-track { animation-play-state: paused; }
+/* Pausable con mouse (hover) y con teclado (el contenedor es enfocable): WCAG 2.2.2. */
+.ticker-mask:hover .ticker-track,
+.ticker-mask:focus-within .ticker-track { animation-play-state: paused; }
 
+/* Reduced motion: se quita el MOVIMIENTO, no el estado. El cambio se sigue viendo:
+   - COMPLETO conserva un anillo magenta fijo en lugar del pulso.
+   - El ticker deja de correr y pasa a una fila que hace wrap con TODOS los datos
+     (sin la copia duplicada del loop).
+   - Las barras saltan al valor nuevo sin interpolar. */
 @media (prefers-reduced-motion: reduce) {
-  .completa, .respira, .ticker-track, .barra-fill { animation: none; transition: none; }
+  .respira, .barra-fill, .animate-pulse { animation: none; transition: none; }
+  .completa {
+    animation: none;
+    box-shadow: 0 0 0 2px rgb(var(--danger) / 0.7);
+  }
+  .ticker-track {
+    animation: none;
+    width: auto;
+    flex-wrap: wrap;
+    row-gap: 0.75rem;
+  }
+  .ticker-dup { display: none; }
 }
 
 html {

@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useId, useState } from "react"
 import { ChevronDown } from "lucide-react"
 import { theme } from "@/shell/theme"
 
@@ -12,7 +12,7 @@ function Fila({ label, value, swatch }: { label: string; value: string; swatch?:
     <div className="flex items-center justify-between py-1.5">
       <span className="text-sm text-muted">{label}</span>
       <span className="dato flex items-center gap-2 text-sm font-medium">
-        {swatch && <span className="h-4 w-4 rounded border border-border" style={{ background: value }} />}
+        {swatch && <span aria-hidden="true" className="h-4 w-4 rounded border border-border" style={{ background: value }} />}
         {value}
       </span>
     </div>
@@ -21,16 +21,32 @@ function Fila({ label, value, swatch }: { label: string; value: string; swatch?:
 
 function Seccion({ titulo, children, abierta }: { titulo: string; children: React.ReactNode; abierta?: boolean }) {
   const [open, setOpen] = useState(!!abierta)
+  const id = useId()
+  // Patron acordeon WAI-ARIA: el h2 contiene al boton (no al reves) y el boton expone su estado.
   return (
     <section className="surface-card overflow-hidden">
-      <button
-        onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-center justify-between px-5 py-4 text-left transition-colors hover:bg-subtle"
-      >
-        <h2 className="font-heading text-sm font-bold uppercase tracking-widest">{titulo}</h2>
-        <ChevronDown size={18} strokeWidth={1.25} className={"text-muted transition-transform " + (open ? "rotate-180" : "")} />
-      </button>
-      {open && <div className="border-t border-border px-5 py-4">{children}</div>}
+      <h2>
+        <button
+          type="button"
+          onClick={() => setOpen((o) => !o)}
+          aria-expanded={open}
+          aria-controls={id}
+          className="flex min-h-11 w-full items-center justify-between px-5 py-4 text-left transition-colors hover:bg-subtle"
+        >
+          <span className="font-heading text-sm font-bold uppercase tracking-widest">{titulo}</span>
+          <ChevronDown
+            size={18}
+            strokeWidth={1.25}
+            aria-hidden="true"
+            className={"text-muted transition-transform motion-reduce:transition-none " + (open ? "rotate-180" : "")}
+          />
+        </button>
+      </h2>
+      {open && (
+        <div id={id} role="region" aria-label={titulo} className="border-t border-border px-5 py-4">
+          {children}
+        </div>
+      )}
     </section>
   )
 }
@@ -100,7 +116,7 @@ export function ConfigPage() {
             <span className="chip bg-danger/15 text-danger">vencido</span>
             <span className="chip bg-info/15 text-info">congelado</span>
             <span className="chip bg-accent/15 text-accent">casi lleno</span>
-            <span className="chip bg-danger/20 font-bold text-danger">COMPLETO</span>
+            <span className="chip bg-danger/15 font-bold text-danger">COMPLETO</span>
           </div>
           <p className="pt-3 text-xs text-muted">Todo esto sale de shell/theme.ts. Cambias un archivo y muta el sistema entero.</p>
         </Seccion>

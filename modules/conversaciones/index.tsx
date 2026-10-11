@@ -44,11 +44,14 @@ export function ConversacionesPage() {
     <div className="space-y-4">
       <h1 className="font-heading text-2xl font-bold uppercase tracking-tight">Conversaciones</h1>
 
-      <div className="flex h-[calc(100vh-8rem)] gap-4">
-        <div className="surface-card w-80 shrink-0 overflow-y-auto p-2">
+      {/* Mobile: lista arriba (alto acotado) y conversacion abajo. Desde md: master-detail lado a lado. */}
+      <div className="flex flex-col gap-4 md:h-[calc(100vh-8rem)] md:flex-row">
+        <div className="surface-card max-h-64 w-full shrink-0 overflow-y-auto p-2 md:max-h-none md:w-80">
           {threads.map((t) => (
             <button
               key={t.id}
+              type="button"
+              aria-current={active === t.id ? "true" : undefined}
               onClick={() => setActive(t.id)}
               className={
                 "flex w-full items-start gap-3 rounded p-3 text-left transition-colors " +
@@ -64,13 +67,18 @@ export function ConversacionesPage() {
               </div>
               <div className="flex flex-col items-end gap-1">
                 <span className="dato text-[11px] text-muted">{t.time}</span>
-                {t.unread > 0 && <span className="chip dato bg-accent px-1.5 font-bold text-bg">{t.unread}</span>}
+                {t.unread > 0 && (
+                  <span className="chip dato bg-accent px-1.5 font-bold text-bg">
+                    {t.unread}
+                    <span className="sr-only"> sin leer</span>
+                  </span>
+                )}
               </div>
             </button>
           ))}
         </div>
 
-        <div className="surface-card flex flex-1 flex-col overflow-hidden">
+        <div className="surface-card flex min-h-[28rem] min-w-0 flex-1 flex-col overflow-hidden md:min-h-0">
           {actual && (
             <div className="flex items-center gap-3 border-b border-border px-6 py-4">
               <span className={"dato flex h-10 w-10 items-center justify-center rounded font-bold " + tintOf(actual.id)}>
@@ -79,32 +87,46 @@ export function ConversacionesPage() {
               <div>
                 <p className="font-heading font-bold">{actual.name}</p>
                 <p className="flex items-center gap-1.5 text-xs text-muted">
-                  <span className="h-1.5 w-1.5 rounded-full bg-success" />
+                  <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-success" />
                   en linea
                 </p>
               </div>
             </div>
           )}
-          <div className="flex-1 space-y-3 overflow-y-auto p-6">
+          <div
+            role="log"
+            tabIndex={0}
+            aria-label={actual ? `Mensajes con ${actual.name}` : "Mensajes"}
+            className="min-h-0 flex-1 space-y-3 overflow-y-auto p-4 md:p-6"
+          >
             {msgs.map((m) => (
               <div
                 key={m.id}
                 className={
-                  "max-w-[70%] rounded px-4 py-2 text-sm " + (m.from === "vos" ? "ml-auto bg-primary text-fg" : "bg-subtle")
+                  "max-w-[85%] rounded px-4 py-2 text-sm md:max-w-[70%] " + (m.from === "vos" ? "ml-auto bg-primary text-fg" : "bg-subtle")
                 }
               >
                 {m.text}
-                <span className="dato mt-1 block text-[11px] opacity-60">{m.time}</span>
+                <span className={"dato mt-1 block text-[11px] " + (m.from === "vos" ? "text-fg/85" : "text-muted")}>{m.time}</span>
               </div>
             ))}
           </div>
           <div className="flex items-center gap-2 border-t border-border p-4">
+            <label htmlFor="mensaje" className="sr-only">
+              Escribir un mensaje
+            </label>
             <input
+              id="mensaje"
+              autoComplete="off"
               placeholder="Escribi un mensaje..."
-              className="w-full rounded bg-subtle px-4 py-2.5 text-sm outline-none"
+              className="w-full rounded border border-muted bg-subtle px-4 py-2.5 text-sm placeholder:text-muted"
             />
-            <button className="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-primary text-fg transition-opacity hover:opacity-90">
-              <Send size={18} strokeWidth={1.25} />
+            <button
+              type="button"
+              aria-label="Enviar mensaje"
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded bg-primary text-fg transition-opacity hover:opacity-90"
+            >
+              <Send size={18} strokeWidth={1.25} aria-hidden="true" />
             </button>
           </div>
         </div>

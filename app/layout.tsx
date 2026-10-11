@@ -1,5 +1,6 @@
 import "./globals.css"
 import type { ReactNode, CSSProperties } from "react"
+import type { Metadata } from "next"
 import { theme } from "@/shell/theme"
 import { fontClass } from "@/shell/fonts"
 import { Nav } from "@/shell/nav"
@@ -43,7 +44,11 @@ function rgb(hex: string) {
   return `${(n >> 16) & 255} ${(n >> 8) & 255} ${n & 255}`
 }
 
-export const metadata = { title: "Sistema", description: "Demo" }
+// Un titulo por ruta (cada page.tsx exporta el suyo) con el nombre de marca del theme.
+export const metadata: Metadata = {
+  title: { default: theme.brand.name, template: `%s · ${theme.brand.name}` },
+  description: `Demo frontend de ${theme.brand.name}: sistema de gestion para gimnasios con datos de ejemplo.`,
+}
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   const c = theme.colors
@@ -74,9 +79,18 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="es">
       <body className={fontClass} style={vars}>
-        <div className={"min-h-screen bg-bg text-fg " + (stacked ? "flex flex-col" : "flex")}>
+        <a
+          href="#contenido"
+          className="sr-only rounded bg-accent px-4 py-2 text-sm font-bold text-bg focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-50"
+        >
+          Saltar al contenido
+        </a>
+        {/* Debajo de md el chasis pasa a columna (barra superior); desde md, sidebar a la izquierda. */}
+        <div className={"min-h-screen bg-bg text-fg flex flex-col " + (stacked ? "" : "md:flex-row")}>
           <Nav />
-          <main className="flex-1 overflow-x-hidden p-[var(--pad)]">{children}</main>
+          <main id="contenido" tabIndex={-1} className="min-w-0 flex-1 overflow-x-clip p-[var(--pad)] outline-none">
+            {children}
+          </main>
         </div>
       </body>
     </html>

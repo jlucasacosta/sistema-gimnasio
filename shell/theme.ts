@@ -59,7 +59,9 @@ export const forja: Theme = {
     subtle: "#1A212B",
     success: "#2DD4BF", // teal frio: cobrado / activo (sin verde-tierra)
     warning: "#C6F24E", // volt-lime: casi lleno / por vencer
-    danger: "#EC3B8A", // magenta: lleno / vencido (pulsa)
+    // magenta: lleno / vencido (pulsa). Aclarado desde #EC3B8A (mismo tono, 333 grados)
+    // para que el chip tintado (bg-danger/15) llegue a 4.5:1 sobre surface.
+    danger: "#F060A0",
     info: "#22D3EE", // cian: espacio / recuperado
   },
   aforo: { casi: 0.6, lleno: 0.85 },

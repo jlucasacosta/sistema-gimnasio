@@ -41,42 +41,51 @@ export function ContactosPage() {
 
       {/* barra de busqueda dominante: ancha y protagonica */}
       <div className="relative">
-        <Search size={22} strokeWidth={1.25} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
+        <label htmlFor="buscar-socio" className="sr-only">
+          Buscar socio por nombre o documento
+        </label>
+        <Search size={22} strokeWidth={1.25} aria-hidden="true" className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted" />
         <input
+          id="buscar-socio"
+          type="search"
+          autoComplete="off"
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Buscar socio por nombre o documento..."
-          className="dato w-full rounded border border-border bg-surface py-4 pl-12 pr-4 text-lg outline-none transition-colors focus:border-accent"
+          className="dato w-full rounded border border-muted bg-surface py-4 pl-12 pr-4 text-lg placeholder:text-muted focus-visible:border-accent"
         />
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap gap-2">
+        <div role="group" aria-label="Filtrar por estado" className="flex flex-wrap gap-2">
           {(["todos", "activo", "por-vencer", "vencido", "congelado"] as const).map((t) => (
             <button
               key={t}
+              type="button"
               onClick={() => setFiltro(t)}
-              className={"chip transition-colors " + (filtro === t ? "bg-primary text-fg" : "bg-subtle text-muted hover:text-fg")}
+              aria-pressed={filtro === t}
+              className={"chip tap transition-colors " + (filtro === t ? "bg-primary text-fg" : "bg-subtle text-muted hover:text-fg")}
             >
-              {t}
+              {t.replace("-", " ")}
             </button>
           ))}
         </div>
-        <span className="dato text-xs text-muted">
+        <span role="status" className="dato text-xs text-muted">
           {visibles.length} / {rows.length} socios
         </span>
       </div>
 
-      <div className="surface-card overflow-x-auto">
+      <div role="region" aria-label="Tabla de socios (desplazable)" tabIndex={0} className="surface-card overflow-x-auto">
         <table className="w-full min-w-[720px] text-left text-sm">
+          <caption className="sr-only">Socios del club con plan, estado, ultimo check-in y vencimiento</caption>
           <thead>
             <tr className="border-b border-border text-[10px] uppercase tracking-widest text-muted">
-              <th className="px-4 py-2 font-medium">Socio</th>
-              <th className="px-4 py-2 font-medium">Documento</th>
-              <th className="px-4 py-2 font-medium">Plan</th>
-              <th className="px-4 py-2 font-medium">Estado</th>
-              <th className="px-4 py-2 font-medium">Ultimo check-in</th>
-              <th className="px-4 py-2 font-medium">Vence</th>
+              <th scope="col" className="px-4 py-2 font-medium">Socio</th>
+              <th scope="col" className="px-4 py-2 font-medium">Documento</th>
+              <th scope="col" className="px-4 py-2 font-medium">Plan</th>
+              <th scope="col" className="px-4 py-2 font-medium">Estado</th>
+              <th scope="col" className="px-4 py-2 font-medium">Ultimo check-in</th>
+              <th scope="col" className="px-4 py-2 font-medium">Vence</th>
             </tr>
           </thead>
           <tbody>
@@ -89,7 +98,7 @@ export function ContactosPage() {
                 <td className="dato px-4 py-2.5 text-muted">{s.documento}</td>
                 <td className="dato px-4 py-2.5">{s.plan}</td>
                 <td className="px-4 py-2.5">
-                  <span className={"chip " + estadoChip[s.estado]}>{s.estado}</span>
+                  <span className={"chip " + estadoChip[s.estado]}>{s.estado.replace("-", " ")}</span>
                 </td>
                 <td className="dato px-4 py-2.5 text-muted">{s.ultimoCheckin}</td>
                 <td className="dato px-4 py-2.5">{s.vencimiento}</td>
@@ -98,7 +107,7 @@ export function ContactosPage() {
             {visibles.length === 0 && (
               <tr>
                 <td colSpan={6} className="px-4 py-10 text-center text-sm text-muted">
-                  Sin socios para "{q}"
+                  Sin socios para &quot;{q}&quot;
                 </td>
               </tr>
             )}

@@ -2,12 +2,15 @@ node_modules/
 .next/
 dist/
 out/
+*.local
+*.log
+*.tsbuildinfo
+.DS_Store
+.vercel
+
+# Variables de entorno: NUNCA se suben. Solo .env.example (placeholders vacios).
+# Esta excepcion tiene que ir ULTIMA: si `vercel link` agrega otra linea `.env*`
+# despues, hay que volver a dejar `!.env.example` al final.
 .env
 .env.*
 !.env.example
-*.local
-*.log
-.DS_Store
-
-.vercel
-.env*

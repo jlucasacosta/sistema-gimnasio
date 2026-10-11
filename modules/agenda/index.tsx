@@ -25,7 +25,7 @@ function BloqueClase({ c }: { c: ClaseAgenda }) {
   const p = pct(c.ocupados, c.cupo)
 
   return (
-    <div className="flex gap-4">
+    <li className="flex gap-4">
       {/* eje horario a la izquierda */}
       <div className="flex w-14 shrink-0 flex-col items-end pt-1">
         <span className="dato text-lg font-bold text-fg">{c.hora}</span>
@@ -48,10 +48,11 @@ function BloqueClase({ c }: { c: ClaseAgenda }) {
       </div>
 
       {/* bloque de la clase */}
-      <div className={"surface-card mb-3 flex-1 p-4 " + (cancelada ? "opacity-55" : "")}>
+      {/* Cancelada: se pinta con tokens (muted + tachado + chip danger), nunca con opacity (rompe contraste). */}
+      <div className="surface-card mb-3 min-w-0 flex-1 p-4">
         <div className="flex flex-wrap items-start justify-between gap-2">
           <div className="min-w-0">
-            <p className={"font-heading text-base font-bold " + (cancelada ? "line-through" : "")}>{c.clase}</p>
+            <p className={"font-heading text-base font-bold " + (cancelada ? "text-muted line-through" : "")}>{c.clase}</p>
             <p className="dato text-[11px] text-muted">
               {c.coach} · {c.sala}
             </p>
@@ -59,25 +60,32 @@ function BloqueClase({ c }: { c: ClaseAgenda }) {
           <span className={"chip " + estadoChip[c.estado]}>{estadoLabel[c.estado]}</span>
         </div>
 
-        <div className="mt-3 flex items-center gap-3">
-          <div className="flex w-20 shrink-0 items-baseline gap-1">
+        <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2 sm:flex-nowrap">
+          <div className="order-1 flex w-20 shrink-0 items-baseline gap-1">
             <span className={"dato text-3xl font-bold " + (completa ? "text-danger" : cancelada ? "text-muted" : "text-fg")}>
               {c.ocupados}
             </span>
             <span className="dato text-base text-muted">/{c.cupo}</span>
           </div>
-          <div className="flex-1">
-            <div className={"barra h-6 " + (completa ? "completa" : "")}>
+          <div className="order-3 w-full sm:order-2 sm:w-auto sm:flex-1">
+            <div
+              role="meter"
+              aria-label={`${c.clase} ${c.hora}: ${c.ocupados} de ${c.cupo} lugares`}
+              aria-valuemin={0}
+              aria-valuemax={c.cupo}
+              aria-valuenow={c.ocupados}
+              className={"barra h-6 " + (completa ? "completa" : "")}
+            >
               <div
                 className={"barra-fill " + (cancelada ? "bg-border" : rellenoAforo[nivel])}
-                style={{ width: (cancelada ? 0 : p * 100) + "%" }}
+                style={{ transform: `scaleX(${cancelada ? 0 : p})` }}
               />
             </div>
           </div>
-          <div className="w-24 shrink-0 text-right">
+          <div className="order-2 ml-auto text-right sm:order-3 sm:ml-0 sm:w-24 sm:shrink-0">
             {completa ? (
               <div className="space-y-1">
-                <span className="chip bg-danger/20 font-bold text-danger">COMPLETO</span>
+                <span className="chip bg-danger/15 font-bold text-danger">COMPLETO</span>
                 {c.waitlist > 0 && <p className="dato text-[11px] text-danger">+{c.waitlist} waitlist</p>}
               </div>
             ) : cancelada ? (
@@ -88,7 +96,7 @@ function BloqueClase({ c }: { c: ClaseAgenda }) {
           </div>
         </div>
       </div>
-    </div>
+    </li>
   )
 }
 
@@ -116,11 +124,11 @@ export function AgendaPage() {
         {ordenadas.length === 0 ? (
           Array.from({ length: 6 }).map((_, i) => <div key={i} className="mb-3 h-20 animate-pulse rounded bg-subtle" />)
         ) : (
-          <div>
+          <ol>
             {ordenadas.map((c) => (
               <BloqueClase key={c.id} c={c} />
             ))}
-          </div>
+          </ol>
         )}
       </div>
     </div>

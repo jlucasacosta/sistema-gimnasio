@@ -15,7 +15,7 @@ const estadoChip: Record<EstadoMembresia, string> = {
 const cobroChip: Record<EstadoCobro, string> = {
   cobrado: "bg-success/15 text-success",
   pendiente: "bg-warning/15 text-warning",
-  rechazado: "bg-danger/20 text-danger",
+  rechazado: "bg-danger/15 text-danger",
 }
 
 const fmt = (n: number) => "$ " + n.toLocaleString("es-AR")
@@ -56,23 +56,27 @@ export function VentasPage() {
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap gap-2">
+        <div role="group" aria-label="Filtrar por estado" className="flex flex-wrap gap-2">
           {(["todos", "vencido", "por-vencer", "activo", "congelado"] as const).map((t) => (
             <button
               key={t}
+              type="button"
               onClick={() => setFiltro(t)}
-              className={"chip transition-colors " + (filtro === t ? "bg-primary text-fg" : "bg-subtle text-muted hover:text-fg")}
+              aria-pressed={filtro === t}
+              className={"chip tap transition-colors " + (filtro === t ? "bg-primary text-fg" : "bg-subtle text-muted hover:text-fg")}
             >
-              {t}
+              {t.replace("-", " ")}
             </button>
           ))}
         </div>
-        <div className="flex gap-2">
+        <div role="group" aria-label="Ordenar la lista" className="flex gap-2">
           {(["urgencia", "monto"] as const).map((o) => (
             <button
               key={o}
+              type="button"
               onClick={() => setOrden(o)}
-              className={"chip transition-colors " + (orden === o ? "bg-accent/20 text-accent" : "bg-subtle text-muted hover:text-fg")}
+              aria-pressed={orden === o}
+              className={"chip tap transition-colors " + (orden === o ? "bg-accent/20 text-accent" : "bg-subtle text-muted hover:text-fg")}
             >
               orden: {o}
             </button>
@@ -81,11 +85,11 @@ export function VentasPage() {
       </div>
 
       {/* la tira de comprobantes */}
-      <div className="surface-card divide-y divide-border">
+      <ul aria-label="Membresias" className="surface-card divide-y divide-border">
         {visibles.length === 0
-          ? Array.from({ length: 8 }).map((_, i) => <div key={i} className="h-14 animate-pulse bg-subtle" />)
+          ? Array.from({ length: 8 }).map((_, i) => <li key={i} aria-hidden="true" className="h-14 animate-pulse bg-subtle" />)
           : visibles.map((t) => (
-              <div
+              <li
                 key={t.id}
                 className={
                   "flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-3 transition-colors hover:bg-subtle " +
@@ -98,12 +102,12 @@ export function VentasPage() {
                   <p className="dato text-[11px] text-muted">{t.plan}</p>
                 </div>
                 <span className="dato w-28 shrink-0 text-xs text-muted">{venceLabel(t.dias)}</span>
-                <span className={"chip w-24 shrink-0 justify-center " + estadoChip[t.estado]}>{t.estado}</span>
+                <span className={"chip w-24 shrink-0 justify-center " + estadoChip[t.estado]}>{t.estado.replace("-", " ")}</span>
                 <span className={"chip w-24 shrink-0 justify-center " + cobroChip[t.cobro]}>{t.cobro}</span>
                 <span className="dato w-24 shrink-0 text-right text-base font-bold text-fg">{fmt(t.monto)}</span>
-              </div>
+              </li>
             ))}
-      </div>
+      </ul>
     </div>
   )
 }
