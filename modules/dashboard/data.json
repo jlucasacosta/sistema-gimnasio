@@ -37,7 +37,7 @@
     },
     {
       "id": "t4",
-      "clase": "Boxeo Tecnico",
+      "clase": "Boxeo Técnico",
       "coach": "Ivan Otero",
       "hora": "18:30",
       "sala": "Ring · Sala A",
@@ -162,13 +162,13 @@
     },
     {
       "id": "7",
-      "label": "Debitos rechazados",
+      "label": "Débitos rechazados",
       "valor": "9",
       "tono": "danger"
     },
     {
       "id": "8",
-      "label": "Ocupacion media",
+      "label": "Ocupación media",
       "valor": "78%",
       "tono": "accent"
     }

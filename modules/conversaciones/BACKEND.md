@@ -4,5 +4,5 @@
 - Tablas: conversaciones, mensajes
 - Ingreso: webhook de WhatsApp (Meta) -> Route Handler -> insert en mensajes
 - Realtime: suscribir a mensajes para inbox en vivo
-- Job (pg-boss): reintento de envio fallido
+- Job (pg-boss): reintento de envío fallido
 - Reemplazar: modules/conversaciones/api.ts. Misma firma.

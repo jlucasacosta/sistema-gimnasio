@@ -47,7 +47,7 @@ function rgb(hex: string) {
 // Un titulo por ruta (cada page.tsx exporta el suyo) con el nombre de marca del theme.
 export const metadata: Metadata = {
   title: { default: theme.brand.name, template: `%s · ${theme.brand.name}` },
-  description: `Demo frontend de ${theme.brand.name}: sistema de gestion para gimnasios con datos de ejemplo.`,
+  description: `Demo frontend de ${theme.brand.name}: sistema de gestión para gimnasios con datos de ejemplo.`,
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {

@@ -34,7 +34,7 @@ function Ticker({ items }: { items: TickerItem[] }) {
     <div
       className="ticker-mask surface-card overflow-hidden py-3"
       role="region"
-      aria-label="Telemetria del dia (se pausa con el foco)"
+      aria-label="Telemetría del día (se pausa con el foco)"
       tabIndex={0}
     >
       <div className="ticker-track">
@@ -128,7 +128,7 @@ function LineaCheckins({ curva }: { curva: CheckinHora[] }) {
   // marcador "ahora" van en HTML posicionado por %, asi no se deforman con el ancho.
   // La region es enfocable para poder desplazarla con teclado en pantallas angostas.
   return (
-    <div role="region" aria-label="Grafico de check-ins por franja (desplazable)" tabIndex={0} className="w-full overflow-x-auto">
+    <div role="region" aria-label="Gráfico de check-ins por franja (desplazable)" tabIndex={0} className="w-full overflow-x-auto">
       <div className="relative min-w-[520px]">
         <svg role="img" aria-label={resumen} viewBox={`0 0 ${W} ${H}`} className="block h-44 w-full" preserveAspectRatio="none">
           {/* zona bajo la curva: cobalto como FILL (nunca texto) */}
@@ -206,7 +206,7 @@ export function DashboardPage() {
       <div className="grid gap-4 lg:grid-cols-3">
         {/* Hero-number: el aforo del club, gigante, respirando. UN numero manda. */}
         <div className="surface-card flex flex-col justify-center p-6">
-          <h2 className="font-heading text-xs font-bold uppercase tracking-widest text-muted">Ocupacion del club</h2>
+          <h2 className="font-heading text-xs font-bold uppercase tracking-widest text-muted">Ocupación del club</h2>
           {aforo && (
             <>
               <div className="mt-3 flex items-baseline gap-2">
@@ -216,7 +216,7 @@ export function DashboardPage() {
               <div className="mt-4">
                 <div
                   role="meter"
-                  aria-label="Ocupacion del club"
+                  aria-label="Ocupación del club"
                   aria-valuemin={0}
                   aria-valuemax={aforo.cupo}
                   aria-valuenow={aforo.ocupados}
@@ -233,7 +233,7 @@ export function DashboardPage() {
         {/* COMPONENTE ESTRELLA: Termometro de Cupos */}
         <section className="surface-card p-5 lg:col-span-2">
           <header className="mb-1 flex items-baseline justify-between">
-            <h2 className="font-heading text-xs font-bold uppercase tracking-widest">Ocupacion de clases</h2>
+            <h2 className="font-heading text-xs font-bold uppercase tracking-widest">Ocupación de clases</h2>
             <span className="dato text-[11px] text-muted">
               {completas > 0 ? `${completas} completas` : "sin clases completas"}
             </span>
@@ -251,7 +251,7 @@ export function DashboardPage() {
         <header className="mb-4 flex items-baseline justify-between">
           <h2 className="font-heading text-xs font-bold uppercase tracking-widest">Check-ins por franja</h2>
           <span className="dato text-[11px] text-muted">
-            meta <span className="text-fg">{theme.checkinObjetivo}</span>/dia
+            meta <span className="text-fg">{theme.checkinObjetivo}</span>/día
           </span>
         </header>
         {curva.length > 0 ? <LineaCheckins curva={curva} /> : <div className="h-48 animate-pulse rounded bg-subtle" />}

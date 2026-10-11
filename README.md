@@ -1,6 +1,6 @@
 # Forja Athletic Club — Sistema para gimnasios
 
-Un sistema de gestion para gimnasios: clases del dia con cupos y lista de espera, membresias y cobros, conversaciones con socios y ficha de socios. Un sistema demo hecho con Next.js.
+Un sistema de gestión para gimnasios: clases del día con cupos y lista de espera, membresías y cobros, conversaciones con socios y ficha de socios. Un sistema demo hecho con Next.js.
 
 > Es un demo **frontend** con datos de ejemplo (mock). No tiene backend conectado: sirve para ver cómo se ve y cómo funciona un sistema así, y para aprender a construirlo. Nada de lo que hagas en pantalla se guarda: al refrescar (F5) vuelve todo a los datos originales.
 
@@ -18,12 +18,12 @@ Aprendé a crear tu Agencia de IA y conseguir tu primer cliente. Eso lo trabajam
 ---
 
 ## Qué incluye
-- Dashboard: ocupacion del club en vivo, ocupacion de cada clase del bloque actual (barras que se llenan hasta "COMPLETO"), curva de check-ins por franja y cinta de telemetria del dia
-- Clases (agenda del dia en linea de tiempo, con coach, sala, cupo y lista de espera)
+- Dashboard: ocupación del club en vivo, ocupación de cada clase del bloque actual (barras que se llenan hasta "COMPLETO"), curva de check-ins por franja y cinta de telemetría del día
+- Clases (agenda del día en línea de tiempo, con coach, sala, cupo y lista de espera)
 - Conversaciones (inbox de socios)
-- Membresias (cola de vencimientos y cobros: activo, por vencer, vencido, congelado, y debitos rechazados)
+- Membresías (cola de vencimientos y cobros: activo, por vencer, vencido, congelado, y débitos rechazados)
 - Socios (tabla con buscador por nombre o documento, plan y estado de cuota)
-- Configuracion
+- Configuración
 
 ## Requisitos (instalá esto primero)
 
@@ -65,26 +65,26 @@ Listo. Vas a ver el sistema funcionando.
 ## Estructura de carpetas
 
     app/            las pantallas (una carpeta por ruta) y los estilos globales
-    modules/        un modulo por pantalla: index.tsx (la UI), api.ts (las funciones de datos) y data.json (los datos)
-    modules/*/BACKEND.md   qué tablas y tareas necesitaria cada modulo con backend real
+    modules/        un módulo por pantalla: index.tsx (la UI), api.ts (las funciones de datos) y data.json (los datos)
+    modules/*/BACKEND.md   qué tablas y tareas necesitaría cada módulo con backend real
     shell/          el chasis: theme.ts (el diseño), navegacion, fuentes, aforo.ts y auth-stub.ts
-    docs/           IMPLEMENTAR.md: la guia para llevarlo a produccion
+    docs/           IMPLEMENTAR.md: la guía para llevarlo a producción
     DISENO.md       la ficha de diseño: por qué se ve como se ve
-    .env.example    las variables de entorno que usaria un backend real (todas vacias)
+    .env.example    las variables de entorno que usaría un backend real (todas vacías)
 
 ## Cambiar los datos de ejemplo
 
-Todos los datos del demo viven en archivos `.json`, uno por modulo:
+Todos los datos del demo viven en archivos `.json`, uno por módulo:
 
-    modules/dashboard/data.json       aforo del club, clases del bloque, curva y cinta de telemetria
-    modules/agenda/data.json          clases del dia
-    modules/ventas/data.json          membresias y cobros
+    modules/dashboard/data.json       aforo del club, clases del bloque, curva y cinta de telemetría
+    modules/agenda/data.json          clases del día
+    modules/ventas/data.json          membresías y cobros
     modules/contactos/data.json       socios
     modules/conversaciones/data.json  hilos y mensajes
 
 Editá un archivo, guardá, y la pantalla se actualiza. Son de **solo lectura**: lo que cambies desde la interfaz vive solo en pantalla y **F5 restaura** el JSON original. No hay base de datos ni se guarda nada en el navegador.
 
-Si cambiás nombres de campos, ajustá también los tipos en el `api.ts` de ese modulo.
+Si cambiás nombres de campos, ajustá también los tipos en el `api.ts` de ese módulo.
 
 ## Personalizarlo
 
@@ -94,14 +94,14 @@ Todo el diseño (colores, tipografía, nombre de la marca) vive en un solo archi
 
 Este repo es un demo: no guarda nada. Para convertirlo en un sistema real, la guía paso a paso (para principiantes y con el código copiable) está en [`docs/IMPLEMENTAR.md`](docs/IMPLEMENTAR.md). En resumen:
 
-1. **Supabase**: la base de datos y el login (el SQL de las tablas ya está escrito en la guia, con seguridad RLS).
-2. **Conectar los modulos**: se cambia el cuerpo de las funciones de cada `api.ts`; las pantallas no se tocan.
-3. **Railway + pg-boss**: tareas automaticas (avisos de vencimiento, estados de membresia al dia).
+1. **Supabase**: la base de datos y el login (el SQL de las tablas ya está escrito en la guía, con seguridad RLS).
+2. **Conectar los módulos**: se cambia el cuerpo de las funciones de cada `api.ts`; las pantallas no se tocan.
+3. **Railway + pg-boss**: tareas automáticas (avisos de vencimiento, estados de membresía al día).
 4. **Vercel**: publicar la web con tu dominio.
 5. **IA (OpenAI o Gemini)**: sugerir respuestas a las consultas de los socios, con la clave solo en el servidor.
 6. **Checklist de seguridad** antes de cargar datos reales.
 
-Las variables que vas a necesitar estan listadas (vacias) en `.env.example`. **Nunca subas un `.env` con valores reales.**
+Las variables que vas a necesitar están listadas (vacías) en `.env.example`. **Nunca subas un `.env` con valores reales.**
 
 ## Licencia
 

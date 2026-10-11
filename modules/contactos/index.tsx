@@ -77,14 +77,14 @@ export function ContactosPage() {
 
       <div role="region" aria-label="Tabla de socios (desplazable)" tabIndex={0} className="surface-card overflow-x-auto">
         <table className="w-full min-w-[720px] text-left text-sm">
-          <caption className="sr-only">Socios del club con plan, estado, ultimo check-in y vencimiento</caption>
+          <caption className="sr-only">Socios del club con plan, estado, último check-in y vencimiento</caption>
           <thead>
             <tr className="border-b border-border text-[10px] uppercase tracking-widest text-muted">
               <th scope="col" className="px-4 py-2 font-medium">Socio</th>
               <th scope="col" className="px-4 py-2 font-medium">Documento</th>
               <th scope="col" className="px-4 py-2 font-medium">Plan</th>
               <th scope="col" className="px-4 py-2 font-medium">Estado</th>
-              <th scope="col" className="px-4 py-2 font-medium">Ultimo check-in</th>
+              <th scope="col" className="px-4 py-2 font-medium">Último check-in</th>
               <th scope="col" className="px-4 py-2 font-medium">Vence</th>
             </tr>
           </thead>

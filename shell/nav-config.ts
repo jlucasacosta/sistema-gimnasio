@@ -6,7 +6,7 @@ export const nav: NavItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { label: "Clases", href: "/agenda", icon: Dumbbell },
   { label: "Conversaciones", href: "/conversaciones", icon: MessageSquare },
-  { label: "Membresias", href: "/ventas", icon: CreditCard },
+  { label: "Membresías", href: "/ventas", icon: CreditCard },
   { label: "Socios", href: "/contactos", icon: Users },
-  { label: "Configuracion", href: "/config", icon: Settings },
+  { label: "Configuración", href: "/config", icon: Settings },
 ]

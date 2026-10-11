@@ -55,31 +55,31 @@ export function ConfigPage() {
   const c = theme.colors
   return (
     <div className="space-y-4">
-      <h1 className="font-heading text-2xl font-bold uppercase tracking-tight">Configuracion</h1>
+      <h1 className="font-heading text-2xl font-bold uppercase tracking-tight">Configuración</h1>
 
       <div className="space-y-3">
         <Seccion titulo="Marca" abierta>
           <Fila label="Nombre" value={theme.brand.name} />
-          <Fila label="Titulos" value={theme.font.heading} />
+          <Fila label="Títulos" value={theme.font.heading} />
           <Fila label="Cuerpo / dato" value={theme.font.body} />
         </Seccion>
 
         <Seccion titulo="Forma">
           <Fila label="Modo" value={theme.mode} />
-          <Fila label="Navegacion" value={theme.nav} />
-          <Fila label="Elevacion" value={theme.elevation} />
+          <Fila label="Navegación" value={theme.nav} />
+          <Fila label="Elevación" value={theme.elevation} />
           <Fila label="Bordes" value={theme.radius} />
           <Fila label="Densidad" value={theme.density} />
           <Fila label="Chips" value={theme.badge} />
         </Seccion>
 
-        <Seccion titulo="Ocupacion (dominio)">
+        <Seccion titulo="Ocupación (dominio)">
           <Fila label="Umbral casi lleno" value={`${Math.round(theme.aforo.casi * 100)}%`} />
           <Fila label="Umbral completo" value={`${Math.round(theme.aforo.lleno * 100)}%`} />
-          <Fila label="Meta check-ins / dia" value={String(theme.checkinObjetivo)} />
+          <Fila label="Meta check-ins / día" value={String(theme.checkinObjetivo)} />
           <Fila label="Capacidad del club" value={String(theme.cupoClub)} />
           <p className="pt-2 text-xs text-muted">
-            La Ocupacion de clases se pinta con estos umbrales. Cambia "completo" y toda la app cambia cuando se pone en magenta.
+            La ocupación de clases se pinta con estos umbrales. Cambiá "completo" y toda la app cambia cuando se pone en magenta.
           </p>
         </Seccion>
 
@@ -118,7 +118,7 @@ export function ConfigPage() {
             <span className="chip bg-accent/15 text-accent">casi lleno</span>
             <span className="chip bg-danger/15 font-bold text-danger">COMPLETO</span>
           </div>
-          <p className="pt-3 text-xs text-muted">Todo esto sale de shell/theme.ts. Cambias un archivo y muta el sistema entero.</p>
+          <p className="pt-3 text-xs text-muted">Todo esto sale de shell/theme.ts. Cambiás un archivo y muta el sistema entero.</p>
         </Seccion>
       </div>
     </div>

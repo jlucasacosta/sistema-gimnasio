@@ -114,7 +114,7 @@ Abrí **SQL Editor > New query**, pegá **todo** el bloque y apretá **Run**. Es
 create extension if not exists pg_trgm with schema extensions;
 
 -- ------------------------------------------------------------
--- 1) Catalogos y configuracion del club
+-- 1) Catálogos y configuración del club
 -- ------------------------------------------------------------
 
 -- shell/theme.ts: aforo.casi, aforo.lleno, checkinObjetivo, cupoClub
@@ -128,7 +128,7 @@ create table public.club_config (
   check (umbral_casi < umbral_lleno)
 );
 
--- ventas: el "plan" de cada membresia (Full Anual, Class Pass 12, etc.)
+-- ventas: el "plan" de cada membresía (Full Anual, Class Pass 12, etc.)
 create table public.planes (
   id uuid primary key default gen_random_uuid(),
   nombre text not null unique,
@@ -145,7 +145,7 @@ create table public.coaches (
 );
 
 -- ------------------------------------------------------------
--- 2) Socios, membresias y check-ins
+-- 2) Socios, membresías y check-ins
 -- ------------------------------------------------------------
 
 -- contactos (Socio). Los ids legibles tipo "S-201" salen de una secuencia.
@@ -160,7 +160,7 @@ create table public.socios (
   creado_en timestamptz not null default now()
 );
 
--- ventas (Ticket). El plan y el estado de cuota del socio salen de aca (join).
+-- ventas (Ticket). El plan y el estado de cuota del socio salen de acá (join).
 create sequence public.membresias_codigo_seq start 2000;
 
 create table public.membresias (
@@ -222,7 +222,7 @@ create table public.reservas (
 -- conversaciones (Thread)
 create table public.conversaciones (
   id uuid primary key default gen_random_uuid(),
-  socio_id text references public.socios (id) on delete set null,  -- puede ser alguien que todavia no es socio
+  socio_id text references public.socios (id) on delete set null,  -- puede ser alguien que todavía no es socio
   nombre text not null,
   canal text not null default 'whatsapp',
   no_leidos integer not null default 0 check (no_leidos >= 0),
@@ -239,7 +239,7 @@ create table public.mensajes (
 );
 
 -- ------------------------------------------------------------
--- 5) Indices utiles
+-- 5) Índices útiles
 -- ------------------------------------------------------------
 create index socios_nombre_trgm_idx on public.socios using gin (nombre extensions.gin_trgm_ops);
 create index membresias_socio_idx on public.membresias (socio_id);
@@ -256,13 +256,13 @@ create index mensajes_conv_idx on public.mensajes (conversacion_id, creado_en);
 -- 6) Funciones y vistas que devuelven EXACTO lo que espera cada api.ts
 -- ------------------------------------------------------------
 
--- "Hoy" segun la zona horaria del club (no la del servidor, que es UTC)
+-- "Hoy" según la zona horaria del club (no la del servidor, que es UTC)
 create function public.hoy_club() returns date
 language sql stable as $$
   select (now() at time zone zona_horaria)::date from public.club_config where id = 1
 $$;
 
--- Medianoche del club (hoy, o hace N dias) como timestamptz
+-- Medianoche del club (hoy, o hace N días) como timestamptz
 create function public.inicio_dia_club(dias_atras integer default 0) returns timestamptz
 language sql stable as $$
   select (date_trunc('day', now() at time zone zona_horaria) - make_interval(days => dias_atras)) at time zone zona_horaria
@@ -294,7 +294,7 @@ select
   s.nombre as socio,
   p.nombre as plan,
   m.monto,
-  (m.vencimiento - public.hoy_club()) as dias,             -- negativo = vencido hace X dias
+  (m.vencimiento - public.hoy_club()) as dias,             -- negativo = vencido hace X días
   m.estado,
   m.cobro
 from public.membresias m
@@ -322,7 +322,7 @@ left join lateral (
 ) m on true
 left join public.planes p on p.id = m.plan_id;
 
--- conversaciones: la lista de hilos (Thread). last = texto del ultimo mensaje.
+-- conversaciones: la lista de hilos (Thread). last = texto del último mensaje.
 create view public.hilos_vista with (security_invoker = true) as
 select
   c.id,
@@ -344,7 +344,7 @@ select
       and entrada <= now() - interval '1 day'
       and (salida is null or salida > now() - interval '1 day'))::int as ayer_misma_hora;
 
--- dashboard: linea-area de check-ins por franja de 2 horas (CheckinHora)
+-- dashboard: línea-área de check-ins por franja de 2 horas (CheckinHora)
 create view public.curva_checkins_hoy with (security_invoker = true) as
 select
   to_char(g.hora, 'FM00') as hora,
@@ -358,7 +358,7 @@ left join public.checkins c
 group by g.hora, cfg.zona_horaria
 order by g.hora;
 
--- dashboard: la cinta de telemetria (TickerItem). Una sola fila; api.ts arma los items.
+-- dashboard: la cinta de telemetría (TickerItem). Una sola fila; api.ts arma los items.
 create view public.ticker_kpis with (security_invoker = true) as
 select
   (select count(*) from public.checkins where entrada >= public.inicio_dia_club())::int as checkins_hoy,
@@ -391,7 +391,7 @@ begin
     raise exception 'La clase no existe';
   end if;
   if v_estado = 'cancelada' then
-    raise exception 'La clase esta cancelada';
+    raise exception 'La clase está cancelada';
   end if;
 
   select count(*) into v_ocupados
@@ -408,11 +408,11 @@ end;
 $$;
 
 -- ------------------------------------------------------------
--- 7) Seguridad: RLS + quien es staff
+-- 7) Seguridad: RLS + quién es staff
 -- ------------------------------------------------------------
 
--- Quien puede entrar al panel. Cada usuario de Supabase Auth que cargues
--- aca es parte del equipo del club (admin, recepcion o coach).
+-- Quién puede entrar al panel. Cada usuario de Supabase Auth que cargues
+-- acá es parte del equipo del club (admin, recepción o coach).
 create table public.staff (
   user_id uuid primary key references auth.users (id) on delete cascade,
   rol text not null default 'recepcion' check (rol in ('admin', 'recepcion', 'coach'))
@@ -426,7 +426,7 @@ $$;
 revoke execute on function public.es_staff() from public, anon;
 grant execute on function public.es_staff() to authenticated;
 
--- RLS prendido en TODAS las tablas. Sin politica = nadie entra (ni anon).
+-- RLS prendido en TODAS las tablas. Sin política = nadie entra (ni anon).
 alter table public.staff enable row level security;
 alter table public.club_config enable row level security;
 alter table public.planes enable row level security;
@@ -439,7 +439,7 @@ alter table public.reservas enable row level security;
 alter table public.conversaciones enable row level security;
 alter table public.mensajes enable row level security;
 
--- Politicas de ejemplo: el staff autenticado hace todo; cada uno ve solo su fila en staff.
+-- Políticas de ejemplo: el staff autenticado hace todo; cada uno ve solo su fila en staff.
 create policy "staff ve su propia fila" on public.staff
   for select to authenticated using (user_id = (select auth.uid()));
 
@@ -504,7 +504,7 @@ Para el script, creá la carpeta `scripts/` en tu copia, guardá este archivo co
 ```js
 // scripts/seed.mjs
 // Carga los datos de ejemplo (modules/*/data.json) en TU proyecto de Supabase.
-// Correlo UNA vez, en un proyecto de prueba y con las tablas vacias:
+// Corrélo UNA vez, en un proyecto de prueba y con las tablas vacías:
 //   node --env-file=.env.local scripts/seed.mjs
 // Usa la clave service_role: vive solo en .env.local de tu compu, nunca en el frontend.
 import { createClient } from '@supabase/supabase-js'
@@ -538,7 +538,7 @@ const cuando = (etiqueta) =>
 // Guarda: si ya hay socios, no seguimos (evita duplicar)
 const previos = await supabase.from('socios').select('id', { count: 'exact', head: true })
 if (previos.error) throw new Error(`socios: ${previos.error.message}`)
-if ((previos.count ?? 0) > 0) throw new Error('Ya hay socios cargados. El seed es para una base vacia.')
+if ((previos.count ?? 0) > 0) throw new Error('Ya hay socios cargados. El seed es para una base vacía.')
 
 const dashboard = leer('dashboard')
 const agenda = leer('agenda').clases
@@ -549,9 +549,9 @@ const { threads, conversaciones, generico } = leer('conversaciones')
 // 1) Config del club (shell/theme.ts: cupoClub y checkinObjetivo)
 ok(await supabase.from('club_config').upsert({ id: 1, cupo_club: dashboard.aforo.cupo, checkin_objetivo: 520 }), 'club_config')
 
-// 2) Planes: el precio sale del monto de cada membresia del mock
+// 2) Planes: el precio sale del monto de cada membresía del mock
 const precioPlan = new Map(ventas.map((v) => [v.plan, v.monto]))
-const duracionPlan = { 'Full Anual': 365, 'Premium Trimestral': 90 } // el resto: 30 dias
+const duracionPlan = { 'Full Anual': 365, 'Premium Trimestral': 90 } // el resto: 30 días
 const planes = ok(
   await supabase
     .from('planes')
@@ -576,7 +576,7 @@ ok(
 const socioId = new Map(socios.map((s) => [s.nombre, s.id]))
 const idsSocios = socios.map((s) => s.id)
 
-// 5) Membresias: "dias" del mock -> fecha de vencimiento real (hoy + dias)
+// 5) Membresías: "dias" del mock -> fecha de vencimiento real (hoy + días)
 ok(
   await supabase.from('membresias').insert(
     ventas.map((v) => {
@@ -632,7 +632,7 @@ agenda.forEach((c, i) => {
 })
 ok(await supabase.from('reservas').insert(reservas), 'reservas')
 
-// 8) Check-ins de hoy: la curva del mock define cuantos hay en cada franja de 2 horas.
+// 8) Check-ins de hoy: la curva del mock define cuántos hay en cada franja de 2 horas.
 //    En la franja "ahora" los primeros N quedan adentro (salida = null) = aforo en vivo.
 const checkins = []
 let adentro = dashboard.aforo.ocupados
@@ -782,7 +782,7 @@ export async function createClient() {
           try {
             cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options))
           } catch {
-            // Un Server Component no puede escribir cookies: el middleware ya refresca la sesion.
+            // Un Server Component no puede escribir cookies: el middleware ya refresca la sesión.
           }
         },
       },
@@ -817,7 +817,7 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  // No pongas codigo entre createServerClient y getUser(): puede desloguear usuarios al azar.
+  // No pongas código entre createServerClient y getUser(): puede desloguear usuarios al azar.
   const {
     data: { user },
   } = await supabase.auth.getUser()
@@ -948,7 +948,7 @@ export function haceDias(iso: string | null): string {
   return dias <= 0 ? "hoy" : dias === 1 ? "ayer" : `hace ${dias}d`
 }
 
-// timestamp -> "17:24" si es de hoy, "08 oct" si es de otro dia
+// timestamp -> "17:24" si es de hoy, "08 oct" si es de otro día
 export function horaHilo(iso: string): string {
   const d = new Date(iso)
   const dia = d.toLocaleDateString("en-CA", { timeZone: ZONA })
@@ -1069,7 +1069,7 @@ export async function getAforoClub(): Promise<AforoClub> {
   return { ocupados: data.ocupados, cupo: data.cupo, delta }
 }
 
-// Las clases del bloque actual: las que todavia no terminaron hoy
+// Las clases del bloque actual: las que todavía no terminaron hoy
 export async function getTermometro(): Promise<ClaseCupo[]> {
   const { data, error } = await createClient()
     .from("clases_vista")
@@ -1103,8 +1103,8 @@ export async function getTicker(): Promise<TickerItem[]> {
     { id: "4", label: "No-shows", valor: n(k.no_shows), tono: "warning" },
     { id: "5", label: "Waitlist total", valor: n(k.waitlist_total), tono: "info" },
     { id: "6", label: "MRR", valor: `$ ${n(k.mrr)}`, tono: "success" },
-    { id: "7", label: "Debitos rechazados", valor: n(k.debitos_rechazados), tono: "danger" },
-    { id: "8", label: "Ocupacion media", valor: `${k.ocupacion_media}%`, tono: "accent" },
+    { id: "7", label: "Débitos rechazados", valor: n(k.debitos_rechazados), tono: "danger" },
+    { id: "8", label: "Ocupación media", valor: `${k.ocupacion_media}%`, tono: "accent" },
   ]
 }
 ```
@@ -1186,7 +1186,7 @@ Y guardá este esqueleto como `worker.mjs`. Es un **ejemplo para adaptar**, no u
 import { PgBoss } from "pg-boss"
 import { createClient } from "@supabase/supabase-js"
 
-// Estas 3 variables las cargás en Railway (4.5). Nunca van en el codigo.
+// Estas 3 variables las cargás en Railway (4.5). Nunca van en el código.
 const { DATABASE_URL, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } = process.env
 if (!DATABASE_URL || !SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
   throw new Error("Faltan variables de entorno")
@@ -1212,7 +1212,7 @@ await boss.createQueue("actualizar-estados")
 await boss.createQueue("avisos-vencimiento")
 await boss.createQueue("enviar-aviso")
 
-// 2) Que hace cada cola
+// 2) Qué hace cada cola
 await boss.work("actualizar-estados", async () => {
   const h = hoy()
   const venc = await supabase
@@ -1231,7 +1231,7 @@ await boss.work("actualizar-estados", async () => {
 })
 
 await boss.work("avisos-vencimiento", async () => {
-  // La vista trae "dias": cuantos faltan para vencer
+  // La vista trae "dias": cuántos faltan para vencer
   const { data, error } = await supabase
     .from("membresias_vista")
     .select("id, socio, plan, dias")
@@ -1243,8 +1243,8 @@ await boss.work("avisos-vencimiento", async () => {
 
 await boss.work("enviar-aviso", async ([job]) => {
   const { socio, plan, dias } = job.data
-  // TODO: aca va tu proveedor de WhatsApp o email.
-  console.log(`Aviso a ${socio}: tu plan ${plan} vence en ${dias} dia(s)`)
+  // TODO: acá va tu proveedor de WhatsApp o email.
+  console.log(`Aviso a ${socio}: tu plan ${plan} vence en ${dias} día(s)`)
 })
 
 // 3) Horarios (cron). "tz" hace que 09:00 sea 09:00 en Buenos Aires.
@@ -1360,7 +1360,7 @@ import { createClient } from "@/lib/supabase/server"
 import { hoyClub } from "@/lib/formato"
 
 export async function POST(req: Request) {
-  // 1) Solo usuarios logueados (si no, cualquiera gastaria tu credito)
+  // 1) Solo usuarios logueados (si no, cualquiera gastaría tu crédito)
   const supabase = await createClient()
   const {
     data: { user },
@@ -1373,14 +1373,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Falta conversacionId" }, { status: 400 })
   }
 
-  // 3) Ultimos mensajes del hilo y clases de hoy (para no inventar disponibilidad)
+  // 3) Últimos mensajes del hilo y clases de hoy (para no inventar disponibilidad)
   const { data: mensajes, error } = await supabase
     .from("mensajes")
     .select("de, texto")
     .eq("conversacion_id", conversacionId)
     .order("creado_en", { ascending: false })
     .limit(10)
-  if (error) return NextResponse.json({ error: "No se pudo leer la conversacion" }, { status: 500 })
+  if (error) return NextResponse.json({ error: "No se pudo leer la conversación" }, { status: 500 })
 
   const { data: clases } = await supabase
     .from("clases_vista")
@@ -1399,7 +1399,7 @@ export async function POST(req: Request) {
     model: process.env.OPENAI_MODEL!,
     instructions:
       "Sos recepcionista de un gimnasio. Respondé en español rioplatense, breve y amable. " +
-      "Usá SOLO estos datos de clases de hoy para hablar de cupos; si no esta, decí que lo vas a confirmar. " +
+      "Usá SOLO estos datos de clases de hoy para hablar de cupos; si no está, decí que lo vas a confirmar. " +
       JSON.stringify(clases ?? []),
     input: historial,
     max_output_tokens: 200,

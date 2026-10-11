@@ -88,7 +88,7 @@ export function ConversacionesPage() {
                 <p className="font-heading font-bold">{actual.name}</p>
                 <p className="flex items-center gap-1.5 text-xs text-muted">
                   <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-success" />
-                  en linea
+                  en línea
                 </p>
               </div>
             </div>
@@ -118,7 +118,7 @@ export function ConversacionesPage() {
             <input
               id="mensaje"
               autoComplete="off"
-              placeholder="Escribi un mensaje..."
+              placeholder="Escribí un mensaje..."
               className="w-full rounded border border-muted bg-subtle px-4 py-2.5 text-sm placeholder:text-muted"
             />
             <button

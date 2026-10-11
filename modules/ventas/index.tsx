@@ -21,7 +21,7 @@ const cobroChip: Record<EstadoCobro, string> = {
 const fmt = (n: number) => "$ " + n.toLocaleString("es-AR")
 
 function venceLabel(dias: number) {
-  if (dias < 0) return `vencio hace ${Math.abs(dias)}d`
+  if (dias < 0) return `venció hace ${Math.abs(dias)}d`
   if (dias === 0) return "vence hoy"
   return `vence en ${dias}d`
 }
@@ -48,7 +48,7 @@ export function VentasPage() {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-baseline justify-between gap-3">
-        <h1 className="font-heading text-2xl font-bold uppercase tracking-tight">Membresias</h1>
+        <h1 className="font-heading text-2xl font-bold uppercase tracking-tight">Membresías</h1>
         <div className="flex gap-2">
           <span className="chip bg-success/15 text-success">MRR cobrado {fmt(mrr)}</span>
           <span className="chip bg-danger/15 text-danger">en riesgo {fmt(enRiesgo)}</span>
@@ -85,7 +85,7 @@ export function VentasPage() {
       </div>
 
       {/* la tira de comprobantes */}
-      <ul aria-label="Membresias" className="surface-card divide-y divide-border">
+      <ul aria-label="Membresías" className="surface-card divide-y divide-border">
         {visibles.length === 0
           ? Array.from({ length: 8 }).map((_, i) => <li key={i} aria-hidden="true" className="h-14 animate-pulse bg-subtle" />)
           : visibles.map((t) => (
