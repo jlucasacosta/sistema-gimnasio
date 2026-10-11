@@ -15,13 +15,14 @@ export type Ticket = {
   id: string
   socio: string
   plan: string
-  monto: number // MRR mensual, en pesos
-  dias: number // dias para vencer (negativo = vencido hace X)
+  monto: number // MRR mensual, en pesos (0 si esta congelada: no se cobra)
+  dias: number | null // dias para vencer (negativo = vencido hace X). null si esta congelada
   estado: EstadoMembresia
-  cobro: EstadoCobro
+  cobro: EstadoCobro | null // null si esta congelada: no hay cobro en curso
+  descongela?: string // solo congeladas: cuando se reactiva ("29 jul")
 }
 
-// 28 membresias. Estados mezclados: debitos rechazados, cuotas vencidas,
+// 30 membresias (las de los 30 socios). Estados mezclados: debitos rechazados, cuotas vencidas,
 // congelados y por vencer. La bandeja se ve como un dia real de cobranza.
 export async function getMembresias(): Promise<Ticket[]> {
   await sleep(300)

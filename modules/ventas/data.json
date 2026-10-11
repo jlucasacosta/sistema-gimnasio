@@ -4,8 +4,8 @@
       "id": "M-1042",
       "socio": "Agustina Real",
       "plan": "Full Anual",
-      "monto": 15900,
-      "dias": -6,
+      "monto": 10900,
+      "dias": -7,
       "estado": "vencido",
       "cobro": "rechazado"
     },
@@ -20,7 +20,7 @@
     },
     {
       "id": "M-1044",
-      "socio": "Camila Ordonez",
+      "socio": "Camila Ordóñez",
       "plan": "Class Pass 12",
       "monto": 9800,
       "dias": 1,
@@ -43,7 +43,7 @@
       "monto": 12500,
       "dias": 4,
       "estado": "por-vencer",
-      "cobro": "pendiente"
+      "cobro": "rechazado"
     },
     {
       "id": "M-1047",
@@ -52,13 +52,13 @@
       "monto": 7200,
       "dias": 5,
       "estado": "por-vencer",
-      "cobro": "cobrado"
+      "cobro": "pendiente"
     },
     {
       "id": "M-1048",
       "socio": "Brenda Salcedo",
       "plan": "Full Anual",
-      "monto": 15900,
+      "monto": 10900,
       "dias": 9,
       "estado": "activo",
       "cobro": "cobrado"
@@ -74,7 +74,7 @@
     },
     {
       "id": "M-1050",
-      "socio": "Rocio Miranda",
+      "socio": "Rocío Miranda",
       "plan": "Class Pass 8",
       "monto": 6900,
       "dias": -1,
@@ -83,7 +83,7 @@
     },
     {
       "id": "M-1051",
-      "socio": "Tobias Herrero",
+      "socio": "Tobías Herrero",
       "plan": "Full Mensual",
       "monto": 12500,
       "dias": 14,
@@ -93,11 +93,12 @@
     {
       "id": "M-1052",
       "socio": "Malena Ibarra",
-      "plan": "Congelado",
+      "plan": "Full Mensual",
       "monto": 0,
-      "dias": 20,
+      "dias": null,
       "estado": "congelado",
-      "cobro": "pendiente"
+      "cobro": null,
+      "descongela": "29 jul"
     },
     {
       "id": "M-1053",
@@ -112,14 +113,14 @@
       "id": "M-1054",
       "socio": "Josefina Luro",
       "plan": "Full Anual",
-      "monto": 15900,
+      "monto": 10900,
       "dias": 22,
       "estado": "activo",
       "cobro": "cobrado"
     },
     {
       "id": "M-1055",
-      "socio": "Damian Correa",
+      "socio": "Damián Correa",
       "plan": "Class Pass 12",
       "monto": 9800,
       "dias": -8,
@@ -133,7 +134,7 @@
       "monto": 12500,
       "dias": 6,
       "estado": "por-vencer",
-      "cobro": "cobrado"
+      "cobro": "pendiente"
     },
     {
       "id": "M-1057",
@@ -155,7 +156,7 @@
     },
     {
       "id": "M-1059",
-      "socio": "Matias Rivas",
+      "socio": "Matías Rivas",
       "plan": "Full Mensual",
       "monto": 12500,
       "dias": -12,
@@ -165,17 +166,18 @@
     {
       "id": "M-1060",
       "socio": "Guadalupe Sena",
-      "plan": "Congelado",
+      "plan": "Full Anual",
       "monto": 0,
-      "dias": 30,
+      "dias": null,
       "estado": "congelado",
-      "cobro": "pendiente"
+      "cobro": null,
+      "descongela": "08 ago"
     },
     {
       "id": "M-1061",
-      "socio": "Nicolas Almada",
+      "socio": "Nicolás Almada",
       "plan": "Full Anual",
-      "monto": 15900,
+      "monto": 10900,
       "dias": 27,
       "estado": "activo",
       "cobro": "cobrado"
@@ -227,9 +229,9 @@
     },
     {
       "id": "M-1067",
-      "socio": "Joaquin Bustos",
+      "socio": "Joaquín Bustos",
       "plan": "Full Anual",
-      "monto": 15900,
+      "monto": 10900,
       "dias": 3,
       "estado": "por-vencer",
       "cobro": "pendiente"
@@ -248,7 +250,25 @@
       "socio": "Bautista Leiva",
       "plan": "Full Mensual",
       "monto": 12500,
-      "dias": 7,
+      "dias": 8,
+      "estado": "activo",
+      "cobro": "cobrado"
+    },
+    {
+      "id": "M-1070",
+      "socio": "Renata Ojeda",
+      "plan": "Class Pass 8",
+      "monto": 6900,
+      "dias": 4,
+      "estado": "por-vencer",
+      "cobro": "pendiente"
+    },
+    {
+      "id": "M-1071",
+      "socio": "Gonzalo Pereda",
+      "plan": "Pase Libre",
+      "monto": 18600,
+      "dias": 24,
       "estado": "activo",
       "cobro": "cobrado"
     }

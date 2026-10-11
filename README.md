@@ -18,12 +18,14 @@ Aprendé a crear tu Agencia de IA y conseguir tu primer cliente. Eso lo trabajam
 ---
 
 ## Qué incluye
-- Dashboard: ocupación del club en vivo, ocupación de cada clase del bloque actual (barras que se llenan hasta "COMPLETO"), curva de check-ins por franja y cinta de telemetría del día
-- Clases (agenda del día en línea de tiempo, con coach, sala, cupo y lista de espera)
-- Conversaciones (inbox de socios)
-- Membresías (cola de vencimientos y cobros: activo, por vencer, vencido, congelado, y débitos rechazados)
-- Socios (tabla con buscador por nombre o documento, plan y estado de cuota)
+- Panel: ocupación del club (el número cambia solo, como un reloj de aforo), ocupación de cada clase del bloque actual (barras con su leyenda de colores, hasta "COMPLETO"), curva de check-ins por franja y las cifras del día en una lista
+- Clases (agenda del día en línea de tiempo, con coach, sala, cupo y lista de espera). Hacé clic en una clase para abrir su **ficha** (datos, lugares libres y acciones como "Reservar clase")
+- Conversaciones (inbox de socios; podés escribir un mensaje de prueba)
+- Membresías (cola de vencimientos y cobros: activo, por vencer, vencido, congelado, y débitos rechazados). Cada fila abre su **ficha** con acciones como "Renovar membresía" o "Enviar recordatorio de pago"
+- Socios (tabla con buscador por nombre o documento, plan y estado de cuota). Cada fila abre la ficha del socio
 - Configuración
+
+Todas las pantallas muestran un esqueleto y `—` mientras cargan (nunca un cero falso) y, si la carga falla, un aviso con el botón **Reintentar**. Las acciones de las fichas son de demostración: dicen "Demo: no se guardó nada".
 
 ## Requisitos (instalá esto primero)
 
@@ -67,7 +69,7 @@ Listo. Vas a ver el sistema funcionando.
     app/            las pantallas (una carpeta por ruta) y los estilos globales
     modules/        un módulo por pantalla: index.tsx (la UI), api.ts (las funciones de datos) y data.json (los datos)
     modules/*/BACKEND.md   qué tablas y tareas necesitaría cada módulo con backend real
-    shell/          el chasis: theme.ts (el diseño), navegacion, fuentes, aforo.ts y auth-stub.ts
+    shell/          el chasis: theme.ts (el diseño), navegacion, fuentes, aforo.ts, carga.tsx (estados de carga y error), ficha-lateral.tsx (la ficha) y auth-stub.ts
     docs/           IMPLEMENTAR.md: la guía para llevarlo a producción
     DISENO.md       la ficha de diseño: por qué se ve como se ve
     .env.example    las variables de entorno que usaría un backend real (todas vacías)
@@ -76,8 +78,9 @@ Listo. Vas a ver el sistema funcionando.
 
 Todos los datos del demo viven en archivos `.json`, uno por módulo:
 
-    modules/dashboard/data.json       aforo del club, clases del bloque, curva y cinta de telemetría
-    modules/agenda/data.json          clases del día
+    modules/config/data.json          capacidad del club (única fuente del aforo), horarios, salas y coaches
+    modules/dashboard/data.json       aforo ahora, bloque horario del termómetro, curva y cifras del día
+    modules/agenda/data.json          clases del día (el termómetro del panel toma de acá las del bloque)
     modules/ventas/data.json          membresías y cobros
     modules/contactos/data.json       socios
     modules/conversaciones/data.json  hilos y mensajes

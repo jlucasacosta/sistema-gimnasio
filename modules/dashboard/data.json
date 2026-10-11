@@ -1,81 +1,12 @@
 {
   "aforo": {
     "ocupados": 84,
-    "cupo": 120,
     "delta": 11
   },
-  "termometro": [
-    {
-      "id": "t1",
-      "clase": "Spinning Ride",
-      "coach": "Nadia Ferrer",
-      "hora": "18:00",
-      "sala": "Cycle · Sala C",
-      "ocupados": 21,
-      "cupo": 22,
-      "waitlist": 0
-    },
-    {
-      "id": "t2",
-      "clase": "Funcional Metcon",
-      "coach": "Bruno Salas",
-      "hora": "18:00",
-      "sala": "Box · Sala A",
-      "ocupados": 18,
-      "cupo": 20,
-      "waitlist": 0
-    },
-    {
-      "id": "t3",
-      "clase": "HIIT Express",
-      "coach": "Mara Quiroga",
-      "hora": "18:15",
-      "sala": "Sala B",
-      "ocupados": 15,
-      "cupo": 18,
-      "waitlist": 0
-    },
-    {
-      "id": "t4",
-      "clase": "Boxeo Técnico",
-      "coach": "Ivan Otero",
-      "hora": "18:30",
-      "sala": "Ring · Sala A",
-      "ocupados": 12,
-      "cupo": 16,
-      "waitlist": 0
-    },
-    {
-      "id": "t5",
-      "clase": "Yoga Flow",
-      "coach": "Lucia Vega",
-      "hora": "18:30",
-      "sala": "Estudio",
-      "ocupados": 8,
-      "cupo": 20,
-      "waitlist": 0
-    },
-    {
-      "id": "t6",
-      "clase": "Fuerza Pesada",
-      "coach": "Diego Roldan",
-      "hora": "18:45",
-      "sala": "Weight Room",
-      "ocupados": 13,
-      "cupo": 14,
-      "waitlist": 2
-    },
-    {
-      "id": "t7",
-      "clase": "Pilates Reformer",
-      "coach": "Lucia Vega",
-      "hora": "19:00",
-      "sala": "Estudio",
-      "ocupados": 6,
-      "cupo": 12,
-      "waitlist": 0
-    }
-  ],
+  "bloque": {
+    "desde": "18:00",
+    "hasta": "19:30"
+  },
   "curva": [
     {
       "hora": "06",
@@ -127,7 +58,7 @@
     {
       "id": "1",
       "label": "Check-ins hoy",
-      "valor": "412",
+      "valor": "425",
       "tono": "accent"
     },
     {
@@ -139,7 +70,7 @@
     {
       "id": "3",
       "label": "Clases hoy",
-      "valor": "19",
+      "valor": "18",
       "tono": "info"
     },
     {
@@ -151,25 +82,25 @@
     {
       "id": "5",
       "label": "Waitlist total",
-      "valor": "23",
+      "valor": "7",
       "tono": "info"
     },
     {
       "id": "6",
       "label": "MRR",
-      "valor": "$ 4.86M",
+      "valor": "$ 14,8M",
       "tono": "success"
     },
     {
       "id": "7",
       "label": "Débitos rechazados",
-      "valor": "9",
+      "valor": "8",
       "tono": "danger"
     },
     {
       "id": "8",
       "label": "Ocupación media",
-      "valor": "78%",
+      "valor": "76%",
       "tono": "accent"
     }
   ]

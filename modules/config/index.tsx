@@ -2,6 +2,10 @@
 import { useId, useState } from "react"
 import { ChevronDown } from "lucide-react"
 import { theme } from "@/shell/theme"
+import { etiquetaAforo, chipAforo, type NivelAforo } from "@/shell/aforo"
+import { LeyendaAforo } from "@/shell/leyenda-aforo"
+import { useCarga, ErrorCarga } from "@/shell/carga"
+import { getConfigClub } from "./api"
 
 // ACORDEON: secciones colapsables. Distinto de los paneles fijos de otros
 // modulos: dentro del mismo sistema no se repite un arquetipo. Todo lo que se
@@ -38,7 +42,7 @@ function Seccion({ titulo, children, abierta }: { titulo: string; children: Reac
             size={18}
             strokeWidth={1.25}
             aria-hidden="true"
-            className={"text-muted transition-transform motion-reduce:transition-none " + (open ? "rotate-180" : "")}
+            className={"text-muted " + (open ? "rotate-180" : "")}
           />
         </button>
       </h2>
@@ -51,13 +55,20 @@ function Seccion({ titulo, children, abierta }: { titulo: string; children: Reac
   )
 }
 
+const niveles: NivelAforo[] = ["espacio", "casi", "lleno"]
+
 export function ConfigPage() {
   const c = theme.colors
+  const { data, error, cargando, reintentar } = useCarga(getConfigClub)
+  // Mientras llegan los datos (o si la carga falla) los valores del club llevan "—", nunca un cero falso.
+  const dato = (v: string | number | undefined) => (v === undefined || cargando ? "—" : String(v))
   return (
     <div className="space-y-4">
       <h1 className="font-heading text-2xl font-bold uppercase tracking-tight">Configuración</h1>
 
-      <div className="space-y-3">
+      {error && <ErrorCarga onReintentar={reintentar} />}
+
+      <div aria-busy={cargando} className="space-y-3">
         <Seccion titulo="Marca" abierta>
           <Fila label="Nombre" value={theme.brand.name} />
           <Fila label="Títulos" value={theme.font.heading} />
@@ -75,11 +86,12 @@ export function ConfigPage() {
 
         <Seccion titulo="Ocupación (dominio)">
           <Fila label="Umbral casi lleno" value={`${Math.round(theme.aforo.casi * 100)}%`} />
-          <Fila label="Umbral completo" value={`${Math.round(theme.aforo.lleno * 100)}%`} />
+          <Fila label="Umbral últimos lugares" value={`${Math.round(theme.aforo.lleno * 100)}%`} />
           <Fila label="Meta check-ins / día" value={String(theme.checkinObjetivo)} />
-          <Fila label="Capacidad del club" value={String(theme.cupoClub)} />
+          <Fila label="Capacidad del club" value={dato(data?.cupo)} />
+          <LeyendaAforo className="pt-3" />
           <p className="pt-2 text-xs text-muted">
-            La ocupación de clases se pinta con estos umbrales. Cambiá "completo" y toda la app cambia cuando se pone en magenta.
+            La ocupación de clases se pinta con estos umbrales. Cambiá el de «últimos lugares» y toda la app cambia cuando se pone en magenta.
           </p>
         </Seccion>
 
@@ -93,14 +105,14 @@ export function ConfigPage() {
         </Seccion>
 
         <Seccion titulo="Horarios y salas">
-          <Fila label="Apertura" value="06:00" />
-          <Fila label="Cierre" value="22:00" />
-          <Fila label="Salas" value="Box · Cycle · Estudio · Weight" />
+          <Fila label="Apertura" value={dato(data?.apertura)} />
+          <Fila label="Cierre" value={dato(data?.cierre)} />
+          <Fila label="Salas" value={dato(data?.salas)} />
         </Seccion>
 
         <Seccion titulo="Coaches">
-          <Fila label="Activos" value="7" />
-          <Fila label="Head coach" value="Nadia Ferrer" />
+          <Fila label="Activos" value={dato(data?.coachesActivos)} />
+          <Fila label="Head coach" value={dato(data?.headCoach)} />
         </Seccion>
 
         <Seccion titulo="Integraciones">
@@ -115,7 +127,11 @@ export function ConfigPage() {
             <span className="chip bg-warning/15 text-warning">por vencer</span>
             <span className="chip bg-danger/15 text-danger">vencido</span>
             <span className="chip bg-info/15 text-info">congelado</span>
-            <span className="chip bg-accent/15 text-accent">casi lleno</span>
+            {niveles.map((n) => (
+              <span key={n} className={"chip " + chipAforo[n]}>
+                {etiquetaAforo[n]}
+              </span>
+            ))}
             <span className="chip bg-danger/15 font-bold text-danger">COMPLETO</span>
           </div>
           <p className="pt-3 text-xs text-muted">Todo esto sale de shell/theme.ts. Cambiás un archivo y muta el sistema entero.</p>

@@ -10,7 +10,7 @@
       "ocupados": 12,
       "cupo": 16,
       "waitlist": 0,
-      "estado": "programada"
+      "estado": "finalizada"
     },
     {
       "id": "c2",
@@ -22,7 +22,7 @@
       "ocupados": 22,
       "cupo": 22,
       "waitlist": 3,
-      "estado": "programada"
+      "estado": "finalizada"
     },
     {
       "id": "c3",
@@ -34,19 +34,19 @@
       "ocupados": 14,
       "cupo": 14,
       "waitlist": 1,
-      "estado": "programada"
+      "estado": "finalizada"
     },
     {
       "id": "c4",
       "hora": "09:00",
       "fin": "09:45",
       "clase": "Yoga Flow",
-      "coach": "Lucia Vega",
+      "coach": "Lucía Vega",
       "sala": "Estudio",
       "ocupados": 7,
       "cupo": 20,
       "waitlist": 0,
-      "estado": "programada"
+      "estado": "finalizada"
     },
     {
       "id": "c5",
@@ -58,19 +58,19 @@
       "ocupados": 16,
       "cupo": 18,
       "waitlist": 0,
-      "estado": "programada"
+      "estado": "finalizada"
     },
     {
       "id": "c6",
       "hora": "11:00",
       "fin": "11:50",
       "clase": "Pilates Reformer",
-      "coach": "Lucia Vega",
+      "coach": "Lucía Vega",
       "sala": "Estudio",
       "ocupados": 9,
       "cupo": 12,
       "waitlist": 0,
-      "estado": "programada"
+      "estado": "finalizada"
     },
     {
       "id": "c7",
@@ -82,14 +82,14 @@
       "ocupados": 13,
       "cupo": 20,
       "waitlist": 0,
-      "estado": "programada"
+      "estado": "finalizada"
     },
     {
       "id": "c8",
       "hora": "13:00",
       "fin": "13:45",
       "clase": "Movilidad",
-      "coach": "Tomas Bianchi",
+      "coach": "Tomás Bianchi",
       "sala": "Estudio",
       "ocupados": 4,
       "cupo": 16,
@@ -101,12 +101,12 @@
       "hora": "16:00",
       "fin": "16:45",
       "clase": "Boxeo Técnico",
-      "coach": "Ivan Otero",
+      "coach": "Iván Otero",
       "sala": "Ring · Sala A",
       "ocupados": 11,
       "cupo": 16,
       "waitlist": 0,
-      "estado": "programada"
+      "estado": "finalizada"
     },
     {
       "id": "c10",
@@ -118,7 +118,7 @@
       "ocupados": 19,
       "cupo": 22,
       "waitlist": 0,
-      "estado": "programada"
+      "estado": "finalizada"
     },
     {
       "id": "c11",
@@ -149,24 +149,24 @@
       "hora": "18:30",
       "fin": "19:15",
       "clase": "Boxeo Técnico",
-      "coach": "Ivan Otero",
+      "coach": "Iván Otero",
       "sala": "Ring · Sala A",
       "ocupados": 12,
       "cupo": 16,
       "waitlist": 0,
-      "estado": "programada"
+      "estado": "en-curso"
     },
     {
       "id": "c14",
       "hora": "18:30",
       "fin": "19:20",
       "clase": "Yoga Flow",
-      "coach": "Lucia Vega",
+      "coach": "Lucía Vega",
       "sala": "Estudio",
       "ocupados": 8,
       "cupo": 20,
       "waitlist": 0,
-      "estado": "programada"
+      "estado": "en-curso"
     },
     {
       "id": "c15",
@@ -175,7 +175,7 @@
       "clase": "Fuerza Pesada",
       "coach": "Diego Roldan",
       "sala": "Weight Room",
-      "ocupados": 13,
+      "ocupados": 14,
       "cupo": 14,
       "waitlist": 2,
       "estado": "programada"
@@ -197,7 +197,7 @@
       "hora": "19:30",
       "fin": "20:15",
       "clase": "Core & Abs",
-      "coach": "Tomas Bianchi",
+      "coach": "Tomás Bianchi",
       "sala": "Sala B",
       "ocupados": 10,
       "cupo": 18,
@@ -221,7 +221,7 @@
       "hora": "21:00",
       "fin": "21:45",
       "clase": "Stretch & Recover",
-      "coach": "Lucia Vega",
+      "coach": "Lucía Vega",
       "sala": "Estudio",
       "ocupados": 6,
       "cupo": 20,

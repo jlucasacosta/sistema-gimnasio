@@ -2,8 +2,8 @@
   "threads": [
     {
       "id": "1",
-      "name": "Camila Ordonez",
-      "last": "¿Queda lugar en Spinning de las 18?",
+      "name": "Camila Ordóñez",
+      "last": "Perfecto, reservame ese lugar",
       "time": "17:24",
       "unread": 2
     },
@@ -44,14 +44,14 @@
     },
     {
       "id": "7",
-      "name": "Rocio Miranda",
+      "name": "Rocío Miranda",
       "last": "Quiero pasarme a Full Anual",
       "time": "13:55",
       "unread": 0
     },
     {
       "id": "8",
-      "name": "Tobias Herrero",
+      "name": "Tobías Herrero",
       "last": "¿Hay lockers disponibles a la mañana?",
       "time": "13:20",
       "unread": 0
@@ -94,7 +94,7 @@
     {
       "id": "14",
       "name": "Sabrina Godoy",
-      "last": "¿El coach Ivan da boxeo los martes?",
+      "last": "¿El coach Iván da boxeo los martes?",
       "time": "Ayer",
       "unread": 0
     }
@@ -110,26 +110,58 @@
       {
         "id": "2",
         "from": "vos",
-        "text": "¡Hola Camila! Esa clase está completa, pero hay waitlist con 3 personas",
+        "text": "¡Hola Camila! Queda 1 lugar, se está llenando rápido. ¿Te lo reservo?",
         "time": "17:16"
       },
       {
         "id": "3",
         "from": "socio",
-        "text": "¿Y en el Cycle Power de las 17?",
+        "text": "Dale. ¿Y si llego 5 minutos tarde?",
         "time": "17:19"
       },
       {
         "id": "4",
         "from": "vos",
-        "text": "Ese tiene 3 cupos. ¿Te reservo ahí?",
+        "text": "Te guardamos el lugar hasta 10 minutos después del inicio",
         "time": "17:22"
       },
       {
         "id": "5",
         "from": "socio",
-        "text": "¿Queda lugar en Spinning de las 18?",
+        "text": "Perfecto, reservame ese lugar",
         "time": "17:24"
+      }
+    ],
+    "2": [
+      {
+        "id": "1",
+        "from": "socio",
+        "text": "Hola, voy a viajar y quería saber cómo funciona el congelamiento",
+        "time": "16:40"
+      },
+      {
+        "id": "2",
+        "from": "vos",
+        "text": "¡Hola Ramiro! Se congela desde la app o en recepción, por un mes como mínimo",
+        "time": "16:44"
+      },
+      {
+        "id": "3",
+        "from": "socio",
+        "text": "¿Y durante ese mes me cobran la cuota?",
+        "time": "16:50"
+      },
+      {
+        "id": "4",
+        "from": "vos",
+        "text": "No, el débito se pausa hasta que se descongela la membresía",
+        "time": "16:54"
+      },
+      {
+        "id": "5",
+        "from": "socio",
+        "text": "¿Cómo congelo la membresía un mes?",
+        "time": "16:58"
       }
     ],
     "3": [
@@ -196,6 +228,230 @@
         "time": "15:47"
       }
     ],
+    "5": [
+      {
+        "id": "1",
+        "from": "socio",
+        "text": "Buenas tardes, una consulta sobre los horarios",
+        "time": "14:52"
+      },
+      {
+        "id": "2",
+        "from": "vos",
+        "text": "¡Hola Brenda! Decime qué clase buscás y te paso los horarios",
+        "time": "14:58"
+      },
+      {
+        "id": "3",
+        "from": "socio",
+        "text": "Fuerza Pesada, la hago con Diego",
+        "time": "15:03"
+      },
+      {
+        "id": "4",
+        "from": "vos",
+        "text": "Tenemos a las 08:00 y a las 18:45 con Diego Roldan",
+        "time": "15:07"
+      },
+      {
+        "id": "5",
+        "from": "socio",
+        "text": "¿A qué hora es Fuerza Pesada mañana?",
+        "time": "15:10"
+      }
+    ],
+    "6": [
+      {
+        "id": "1",
+        "from": "socio",
+        "text": "Hola, ¿pueden entrar invitados al club?",
+        "time": "14:20"
+      },
+      {
+        "id": "2",
+        "from": "vos",
+        "text": "¡Hola Ignacio! Sí, con el Pase Libre podés traer un invitado por mes",
+        "time": "14:26"
+      },
+      {
+        "id": "3",
+        "from": "socio",
+        "text": "Genial, ¿tiene algún costo?",
+        "time": "14:31"
+      },
+      {
+        "id": "4",
+        "from": "vos",
+        "text": "No tiene costo, solo se anota en recepción con el documento del invitado",
+        "time": "14:34"
+      },
+      {
+        "id": "5",
+        "from": "socio",
+        "text": "¿Puedo llevar un invitado el sábado?",
+        "time": "14:38"
+      }
+    ],
+    "7": [
+      {
+        "id": "1",
+        "from": "socio",
+        "text": "Hola, estoy con el Class Pass 8 y me quedo corta de clases",
+        "time": "13:30"
+      },
+      {
+        "id": "2",
+        "from": "vos",
+        "text": "¡Hola Rocío! ¿Cuántas clases hacés por semana?",
+        "time": "13:36"
+      },
+      {
+        "id": "3",
+        "from": "socio",
+        "text": "Tres o cuatro, ahora vengo bastante más",
+        "time": "13:41"
+      },
+      {
+        "id": "4",
+        "from": "vos",
+        "text": "Con eso te conviene el Full: clases ilimitadas y sala de aparatos",
+        "time": "13:48"
+      },
+      {
+        "id": "5",
+        "from": "socio",
+        "text": "Quiero pasarme a Full Anual",
+        "time": "13:55"
+      }
+    ],
+    "8": [
+      {
+        "id": "1",
+        "from": "socio",
+        "text": "Buenas, empiezo a entrenar a la mañana desde la semana próxima",
+        "time": "13:02"
+      },
+      {
+        "id": "2",
+        "from": "vos",
+        "text": "¡Hola Tobías! Bienvenido a la franja de las 6",
+        "time": "13:08"
+      },
+      {
+        "id": "3",
+        "from": "socio",
+        "text": "Gracias. ¿Los lockers se alquilan por mes?",
+        "time": "13:12"
+      },
+      {
+        "id": "4",
+        "from": "vos",
+        "text": "Sí, el locker mensual se contrata en recepción y queda a tu nombre",
+        "time": "13:16"
+      },
+      {
+        "id": "5",
+        "from": "socio",
+        "text": "¿Hay lockers disponibles a la mañana?",
+        "time": "13:20"
+      }
+    ],
+    "9": [
+      {
+        "id": "1",
+        "from": "socio",
+        "text": "Hola, congelé mi membresía hace unas semanas",
+        "time": "12:20"
+      },
+      {
+        "id": "2",
+        "from": "vos",
+        "text": "¡Hola Malena! Sí, la tenemos congelada desde el mes pasado",
+        "time": "12:26"
+      },
+      {
+        "id": "3",
+        "from": "socio",
+        "text": "Perfecto. Estoy por volver a entrenar",
+        "time": "12:31"
+      },
+      {
+        "id": "4",
+        "from": "vos",
+        "text": "Podés volver cuando quieras: se reactiva al pasar por recepción",
+        "time": "12:38"
+      },
+      {
+        "id": "5",
+        "from": "socio",
+        "text": "¿Cuándo vence mi congelamiento?",
+        "time": "12:44"
+      }
+    ],
+    "10": [
+      {
+        "id": "1",
+        "from": "socio",
+        "text": "Hola, ¿cuál es el horario de apertura?",
+        "time": "11:40"
+      },
+      {
+        "id": "2",
+        "from": "vos",
+        "text": "¡Hola Franco! Abrimos a las 6 y cerramos a las 22",
+        "time": "11:45"
+      },
+      {
+        "id": "3",
+        "from": "socio",
+        "text": "Entiendo. Es que mi turno de trabajo empieza a las 7",
+        "time": "11:52"
+      },
+      {
+        "id": "4",
+        "from": "vos",
+        "text": "La primera clase es Early Grind a las 6, con el box abierto desde esa hora",
+        "time": "11:58"
+      },
+      {
+        "id": "5",
+        "from": "socio",
+        "text": "¿Se puede entrar antes de las 6?",
+        "time": "12:05"
+      }
+    ],
+    "11": [
+      {
+        "id": "1",
+        "from": "socio",
+        "text": "Buen día, ¿queda cupo en Yoga Flow de hoy?",
+        "time": "11:05"
+      },
+      {
+        "id": "2",
+        "from": "vos",
+        "text": "¡Hola Josefina! Hay dos turnos hoy: 09:00 y 18:30",
+        "time": "11:10"
+      },
+      {
+        "id": "3",
+        "from": "socio",
+        "text": "Me sirve el de la tarde, ¿hay lugar?",
+        "time": "11:18"
+      },
+      {
+        "id": "4",
+        "from": "vos",
+        "text": "Sí, el de las 18:30 tiene 12 lugares libres",
+        "time": "11:24"
+      },
+      {
+        "id": "5",
+        "from": "socio",
+        "text": "Reservo Yoga Flow de las 18:30",
+        "time": "11:32"
+      }
+    ],
     "12": [
       {
         "id": "1",
@@ -226,6 +482,70 @@
         "from": "socio",
         "text": "¿Me anoto en waitlist de Cycle?",
         "time": "10:58"
+      }
+    ],
+    "13": [
+      {
+        "id": "1",
+        "from": "socio",
+        "text": "Hola, recién salgo de la clase de Cycle Power",
+        "time": "20:40"
+      },
+      {
+        "id": "2",
+        "from": "vos",
+        "text": "¡Hola Lautaro! ¿Cómo te fue?",
+        "time": "20:46"
+      },
+      {
+        "id": "3",
+        "from": "socio",
+        "text": "Muy bien, Nadia estuvo excelente",
+        "time": "20:52"
+      },
+      {
+        "id": "4",
+        "from": "vos",
+        "text": "Gracias por avisar, le pasamos tu comentario a Nadia",
+        "time": "20:58"
+      },
+      {
+        "id": "5",
+        "from": "socio",
+        "text": "¡Gracias! Excelente la clase de hoy",
+        "time": "21:05"
+      }
+    ],
+    "14": [
+      {
+        "id": "1",
+        "from": "socio",
+        "text": "Hola, quiero retomar boxeo",
+        "time": "17:40"
+      },
+      {
+        "id": "2",
+        "from": "vos",
+        "text": "¡Hola Sabrina! Tenemos Boxeo Técnico a las 16:00 y a las 18:30",
+        "time": "17:46"
+      },
+      {
+        "id": "3",
+        "from": "socio",
+        "text": "¿Es todos los días?",
+        "time": "17:52"
+      },
+      {
+        "id": "4",
+        "from": "vos",
+        "text": "Sí, de lunes a viernes, siempre con Iván Otero",
+        "time": "17:58"
+      },
+      {
+        "id": "5",
+        "from": "socio",
+        "text": "¿El coach Iván da boxeo los martes?",
+        "time": "18:05"
       }
     ]
   },

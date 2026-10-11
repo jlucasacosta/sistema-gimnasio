@@ -57,7 +57,7 @@ npm install
 npm run dev
 ```
 
-Abrí http://localhost:3000. Tenés que ver el dashboard de Forja Athletic Club con las barras de ocupación moviéndose.
+Abrí http://localhost:3000. Tenés que ver el dashboard de Forja Athletic Club con los números de ocupación del club cambiando solos.
 
 > Si querés subir **tu** versión a GitHub (lo vas a necesitar para Vercel y Railway), hacé un *fork* del repo desde GitHub y cloná tu fork en lugar del original. **Mantené tu fork privado cuando cargues datos reales** (ver sección 7).
 
@@ -73,16 +73,16 @@ Abrí http://localhost:3000. Tenés que ver el dashboard de Forja Athletic Club 
 
 ## 2. Mapa de este sistema
 
-Seis pantallas. Cinco leen datos; la de Configuración muestra el `shell/theme.ts` y no tiene `api.ts`.
+Seis pantallas. Las seis leen datos con `useCarga` (`shell/carga.tsx`): mientras llegan muestran `—` y un esqueleto, y si la función lanza un error muestran el aviso con **Reintentar**. Membresías, Socios y Clases abren una ficha lateral con los datos de la fila y acciones de ejemplo que no guardan nada.
 
 | Módulo (ruta) | Funciones de `api.ts` | Claves de `data.json` | Tablas y vistas sugeridas |
 |---------------|-----------------------|-----------------------|----------------------------|
-| **Dashboard** (`/dashboard`) | `getAforoClub`, `getTermometro`, `getCurvaCheckins`, `getTicker` | `aforo`, `termometro`, `curva`, `ticker` | `checkins`, `club_config` + vistas `aforo_club`, `curva_checkins_hoy`, `ticker_kpis`, `clases_vista` (no tiene tablas propias: agrega las de los otros módulos) |
+| **Panel** (`/dashboard`) | `getAforoClub`, `getTermometro`, `getCurvaCheckins`, `getTicker` | `aforo`, `bloque`, `curva`, `ticker` (la capacidad sale de `config`; las clases del termómetro salen de `agenda`) | `checkins`, `club_config` + vistas `aforo_club`, `curva_checkins_hoy`, `ticker_kpis`, `clases_vista` (no tiene tablas propias: agrega las de los otros módulos) |
 | **Clases** (`/agenda`) | `getClasesHoy` | `clases` | `clases`, `coaches`, `reservas` + vista `clases_vista` |
 | **Conversaciones** (`/conversaciones`) | `getThreads`, `getMessages` | `threads`, `conversaciones`, `generico` | `conversaciones`, `mensajes` + vista `hilos_vista` |
 | **Membresías** (`/ventas`) | `getMembresias` | `membresias` | `membresias`, `planes`, `socios` + vista `membresias_vista` |
 | **Socios** (`/contactos`) | `getSocios` | `socios` | `socios`, `membresias`, `checkins` + vista `socios_vista` |
-| **Configuración** (`/config`) | (ninguna) | (ninguna) | `club_config` guarda lo que hoy vive en `theme.ts`: capacidad del club, meta de check-ins y umbrales de aforo |
+| **Configuración** (`/config`) | `getConfigClub` | `club` | `club_config`: capacidad del club (única fuente: el panel la lee de ahí), meta de check-ins y umbrales de aforo |
 
 Dos cosas que conviene entender antes de seguir:
 
@@ -117,7 +117,8 @@ create extension if not exists pg_trgm with schema extensions;
 -- 1) Catálogos y configuración del club
 -- ------------------------------------------------------------
 
--- shell/theme.ts: aforo.casi, aforo.lleno, checkinObjetivo, cupoClub
+-- cupo_club viene de modules/config/data.json (config.club.cupo); el resto, de shell/theme.ts:
+-- aforo.casi, aforo.lleno, checkinObjetivo (porVencerDias = 7 lo aplica el job de la sección 4)
 create table public.club_config (
   id integer primary key default 1 check (id = 1),         -- una sola fila
   cupo_club integer not null check (cupo_club > 0),
@@ -167,13 +168,15 @@ create table public.membresias (
   id text primary key default 'M-' || nextval('public.membresias_codigo_seq'),   -- "M-1042"
   socio_id text not null references public.socios (id) on delete cascade,
   plan_id uuid not null references public.planes (id),
-  monto integer not null check (monto >= 0),               -- MRR mensual, en pesos
+  monto integer not null check (monto >= 0),               -- MRR mensual, en pesos (0 mientras está congelada)
   inicio date not null default current_date,
   vencimiento date not null,
   estado text not null default 'activo'
     check (estado in ('activo', 'por-vencer', 'vencido', 'congelado')),
-  cobro text not null default 'pendiente'
-    check (cobro in ('cobrado', 'pendiente', 'rechazado'))
+  -- cobro en curso. null si está congelada: no hay cobro ni días para vencer
+  cobro text check (cobro in ('cobrado', 'pendiente', 'rechazado')),
+  congelada_hasta date,                                    -- solo si estado = 'congelado'
+  check (estado = 'congelado' or congelada_hasta is null)
 );
 
 -- dashboard: aforo en vivo y curva de check-ins. salida null = sigue adentro.
@@ -200,7 +203,7 @@ create table public.clases (
   hora_fin time not null,
   cupo integer not null check (cupo > 0),
   estado text not null default 'programada'
-    check (estado in ('programada', 'en-curso', 'cancelada')),
+    check (estado in ('programada', 'en-curso', 'finalizada', 'cancelada')),
   check (hora_fin > hora_inicio)
 );
 
@@ -294,9 +297,11 @@ select
   s.nombre as socio,
   p.nombre as plan,
   m.monto,
-  (m.vencimiento - public.hoy_club()) as dias,             -- negativo = vencido hace X días
+  case when m.estado = 'congelado' then null
+       else (m.vencimiento - public.hoy_club()) end as dias, -- negativo = vencido hace X días; null si está congelada
   m.estado,
-  m.cobro
+  m.cobro,
+  m.congelada_hasta as descongela
 from public.membresias m
 join public.socios s on s.id = m.socio_id
 join public.planes p on p.id = m.plan_id;
@@ -309,12 +314,13 @@ select
   coalesce(p.nombre, 'Sin plan') as plan,
   coalesce(m.estado, 'vencido') as estado,
   (select max(c.entrada) from public.checkins c where c.socio_id = s.id) as ultimo_checkin,
-  m.vencimiento,
+  case when m.estado = 'congelado' then null else m.vencimiento end as vencimiento, -- congelado: sin vencimiento corriendo
+  m.congelada_hasta as descongela,
   s.email,
   s.telefono
 from public.socios s
 left join lateral (
-  select mm.plan_id, mm.estado, mm.vencimiento
+  select mm.plan_id, mm.estado, mm.vencimiento, mm.congelada_hasta
   from public.membresias mm
   where mm.socio_id = s.id
   order by mm.vencimiento desc
@@ -368,7 +374,8 @@ select
   (select count(*) from public.reservas r join public.clases c on c.id = r.clase_id
     where c.fecha = public.hoy_club() and r.estado = 'no-show')::int as no_shows,
   (select count(*) from public.reservas r join public.clases c on c.id = r.clase_id
-    where c.fecha = public.hoy_club() and r.estado = 'lista-espera')::int as waitlist_total,
+    where c.fecha = public.hoy_club() and r.estado = 'lista-espera'
+      and c.estado in ('programada', 'en-curso'))::int as waitlist_total,   -- la espera de una clase terminada ya no cuenta
   (select coalesce(sum(monto), 0) from public.membresias where cobro = 'cobrado')::int as mrr,
   (select count(*) from public.membresias where cobro = 'rechazado')::int as debitos_rechazados,
   (select coalesce(round(100 * avg(ocupados::numeric / cupo)), 0)::int from public.clases_vista
@@ -477,8 +484,8 @@ Qué hace cada parte, para que sepas qué estás ejecutando:
   | Dónde | Valores permitidos |
   |-------|--------------------|
   | `membresias.estado` | `activo`, `por-vencer`, `vencido`, `congelado` |
-  | `membresias.cobro` | `cobrado`, `pendiente`, `rechazado` |
-  | `clases.estado` | `programada`, `en-curso`, `cancelada` |
+  | `membresias.cobro` | `cobrado`, `pendiente`, `rechazado` (o vacío si la membresía está congelada) |
+  | `clases.estado` | `programada`, `en-curso`, `finalizada`, `cancelada` |
   | `reservas.estado` | `reservada`, `lista-espera`, `asistio`, `no-show`, `cancelada` |
   | `mensajes.de` | `socio`, `vos` |
   | `staff.rol` | `admin`, `recepcion`, `coach` |
@@ -531,9 +538,13 @@ const sumarDias = (iso, n) => {
   return d.toISOString().slice(0, 10)
 }
 const aTimestamp = (hhmm) => `${hoy}T${hhmm}:00-03:00` // "17:24" -> hoy a las 17:24 del club
-// El mock usa "17:24" o "Ayer" como hora de un hilo
-const cuando = (etiqueta) =>
-  /^\d{1,2}:\d{2}$/.test(etiqueta) ? aTimestamp(etiqueta.padStart(5, '0')) : `${sumarDias(hoy, -1)}T12:00:00-03:00`
+// El mock usa "17:24" o "Ayer" como hora de un hilo. Con ayer = true, "20:40" es de ayer.
+const cuando = (etiqueta, ayer = false) =>
+  /^\d{1,2}:\d{2}$/.test(etiqueta)
+    ? ayer
+      ? `${sumarDias(hoy, -1)}T${etiqueta.padStart(5, '0')}:00-03:00`
+      : aTimestamp(etiqueta.padStart(5, '0'))
+    : `${sumarDias(hoy, -1)}T12:00:00-03:00`
 
 // Guarda: si ya hay socios, no seguimos (evita duplicar)
 const previos = await supabase.from('socios').select('id', { count: 'exact', head: true })
@@ -541,16 +552,18 @@ if (previos.error) throw new Error(`socios: ${previos.error.message}`)
 if ((previos.count ?? 0) > 0) throw new Error('Ya hay socios cargados. El seed es para una base vacía.')
 
 const dashboard = leer('dashboard')
+const config = leer('config').club
 const agenda = leer('agenda').clases
 const socios = leer('contactos').socios
 const ventas = leer('ventas').membresias
 const { threads, conversaciones, generico } = leer('conversaciones')
 
 // 1) Config del club (shell/theme.ts: cupoClub y checkinObjetivo)
-ok(await supabase.from('club_config').upsert({ id: 1, cupo_club: dashboard.aforo.cupo, checkin_objetivo: 520 }), 'club_config')
+ok(await supabase.from('club_config').upsert({ id: 1, cupo_club: config.cupo, checkin_objetivo: 520 }), 'club_config')
 
 // 2) Planes: el precio sale del monto de cada membresía del mock
-const precioPlan = new Map(ventas.map((v) => [v.plan, v.monto]))
+// (las congeladas tienen monto 0: no cuentan para el precio del plan)
+const precioPlan = new Map(ventas.filter((v) => v.monto > 0).map((v) => [v.plan, v.monto]))
 const duracionPlan = { 'Full Anual': 365, 'Premium Trimestral': 90 } // el resto: 30 días
 const planes = ok(
   await supabase
@@ -562,7 +575,7 @@ const planes = ok(
 const planId = new Map(planes.map((p) => [p.nombre, p.id]))
 
 // 3) Coaches
-const nombresCoach = [...new Set([...agenda.map((c) => c.coach), ...dashboard.termometro.map((c) => c.coach)])]
+const nombresCoach = [...new Set(agenda.map((c) => c.coach))]
 const coaches = ok(await supabase.from('coaches').insert(nombresCoach.map((nombre) => ({ nombre }))).select('id, nombre'), 'coaches')
 const coachId = new Map(coaches.map((c) => [c.nombre, c.id]))
 
@@ -576,11 +589,15 @@ ok(
 const socioId = new Map(socios.map((s) => [s.nombre, s.id]))
 const idsSocios = socios.map((s) => s.id)
 
-// 5) Membresías: "dias" del mock -> fecha de vencimiento real (hoy + días)
+// 5) Membresías: "dias" del mock -> fecha de vencimiento real (hoy + días).
+//    Las congeladas traen dias = null y cobro = null: se les da un vencimiento de referencia
+//    y la fecha en que se descongelan (en el mock "hoy" es el 09 jul: 29 jul = +20 y 08 ago = +30).
+const congeladaEn = { 'M-1052': 20, 'M-1060': 30 }
 ok(
   await supabase.from('membresias').insert(
     ventas.map((v) => {
-      const vencimiento = sumarDias(hoy, v.dias)
+      const congelada = v.estado === 'congelado'
+      const vencimiento = sumarDias(hoy, congelada ? 30 : v.dias)
       return {
         id: v.id,
         socio_id: socioId.get(v.socio),
@@ -590,6 +607,7 @@ ok(
         vencimiento,
         estado: v.estado,
         cobro: v.cobro,
+        congelada_hasta: congelada ? sumarDias(hoy, congeladaEn[v.id] ?? 30) : null,
       }
     })
   ),
@@ -669,12 +687,13 @@ const convsDb = ok(
   'conversaciones'
 )
 const convId = new Map(convsDb.map((c) => [c.nombre, c.id]))
+// Los hilos marcados "Ayer" tienen sus mensajes de ayer; el resto, de hoy.
 const mensajes = threads.flatMap((t) =>
   (conversaciones[t.id] ?? generico).map((m) => ({
     conversacion_id: convId.get(t.name),
     de: m.from,
     texto: m.text,
-    creado_en: new Date(cuando(m.time)).toISOString(),
+    creado_en: new Date(cuando(m.time, t.time === 'Ayer')).toISOString(),
   }))
 )
 ok(await supabase.from('mensajes').insert(mensajes), 'mensajes')
@@ -690,7 +709,7 @@ node --env-file=.env.local scripts/seed.mjs
 
 El script usa la clave `service_role`, por eso **solo se corre en tu compu**, con tu `.env.local`. Tiene un freno: si ya hay socios cargados, no hace nada, para no duplicar ni mezclarse con datos reales. **Usalo solo en un proyecto de prueba.**
 
-Qué esperar: unas 30 personas, 28 membresías, 19 clases con sus reservas y lista de espera, 520 check-ins de hoy y 14 conversaciones. Dos socios quedan sin membresía a propósito (aparecen como "Sin plan"). Los totales del ticker del dashboard van a ser los de **esta** base (30 socios), no los números grandes del demo.
+Qué esperar: 30 personas, 30 membresías (una por socio; dos quedan congeladas, sin cobro ni vencimiento), 19 clases con sus reservas y lista de espera, 520 check-ins de hoy y 14 conversaciones. Los totales del ticker del dashboard van a ser los de **esta** base (30 socios), no los números grandes del demo.
 
 ### 3.4 Crear la cuenta del equipo (primer usuario)
 
@@ -991,7 +1010,7 @@ export async function getClasesHoy(): Promise<ClaseAgenda[]> {
 
 Qué cambió: desaparecen `import raw`, `sleep` y `structuredClone`; los **tipos** (`ClaseAgenda`, `EstadoClase`) quedan intactos. Como la vista ya devuelve las columnas con los mismos nombres y tipos, no hay que transformar nada.
 
-Un detalle: el componente hoy hace `getClasesHoy().then(setClases)` sin manejar errores. En tu copia agregale un `.catch(...)` (por ejemplo, guardar un mensaje de error en el estado y mostrarlo) para que una falla de red no deje la pantalla en blanco.
+Los errores ya están resueltos del lado de la pantalla: cada módulo llama a su función con `useCarga` (`shell/carga.tsx`), que captura la promesa rechazada y muestra el aviso "No pudimos cargar los datos" con el botón **Reintentar**. Por eso, en las funciones de abajo, `throw new Error(...)` es todo lo que hay que hacer cuando la base devuelve un error.
 
 #### Las demás funciones
 
@@ -999,13 +1018,16 @@ Mismo patrón: importás `createClient`, consultás la vista, si hay `error` lo 
 
 ```ts
 // modules/ventas/api.ts
+import { diaMes } from "@/lib/formato"
+
 export async function getMembresias(): Promise<Ticket[]> {
   const { data, error } = await createClient()
     .from("membresias_vista")
-    .select("id, socio, plan, monto, dias, estado, cobro")
-    .order("dias")
+    .select("id, socio, plan, monto, dias, estado, cobro, descongela")
+    .order("dias", { nullsFirst: false })
   if (error) throw new Error(`getMembresias: ${error.message}`)
-  return data as Ticket[]
+  // dias y cobro vienen vacíos (null) en las congeladas; descongela es una fecha que se muestra como "29 jul"
+  return data.map((r) => ({ ...r, descongela: r.descongela ? diaMes(r.descongela) : undefined })) as Ticket[]
 }
 ```
 
@@ -1023,7 +1045,8 @@ export async function getSocios(): Promise<Socio[]> {
     plan: r.plan,
     estado: r.estado,
     ultimoCheckin: haceDias(r.ultimo_checkin),
-    vencimiento: diaMes(r.vencimiento),
+    vencimiento: r.vencimiento ? diaMes(r.vencimiento) : null, // congelado: sin vencimiento
+    descongela: r.descongela ? diaMes(r.descongela) : undefined,
     email: r.email ?? "",
     telefono: r.telefono ?? "",
   }))
@@ -1056,8 +1079,9 @@ export async function getMessages(threadId: string): Promise<Message[]> {
 
 ```ts
 // modules/dashboard/api.ts
-import { horaClub, hoyClub } from "@/lib/formato"
+import { hoyClub } from "@/lib/formato"
 
+// La capacidad sale de club_config (vista aforo_club): es la única fuente, igual que config/data.json en el demo.
 export async function getAforoClub(): Promise<AforoClub> {
   const { data, error } = await createClient()
     .from("aforo_club")
@@ -1069,14 +1093,13 @@ export async function getAforoClub(): Promise<AforoClub> {
   return { ocupados: data.ocupados, cupo: data.cupo, delta }
 }
 
-// Las clases del bloque actual: las que todavía no terminaron hoy
+// Las clases del bloque actual: las que están en curso o todavía no empezaron (ni canceladas ni terminadas)
 export async function getTermometro(): Promise<ClaseCupo[]> {
   const { data, error } = await createClient()
     .from("clases_vista")
     .select("id, clase, coach, hora, sala, ocupados, cupo, waitlist")
     .eq("fecha", hoyClub())
-    .neq("estado", "cancelada")
-    .gte("fin", horaClub())
+    .in("estado", ["programada", "en-curso"])
     .order("hora")
     .limit(7)
   if (error) throw new Error(`getTermometro: ${error.message}`)

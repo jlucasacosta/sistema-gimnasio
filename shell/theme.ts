@@ -31,9 +31,12 @@ export type Theme = {
   // meta de check-ins del dia. Ningun componente inventa un numero magico:
   // shell/aforo.ts los traduce a clases. Cambiar `lleno` cambia cuando toda
   // la app se pone en magenta. Eso es lo que se graba.
+  // La capacidad del club (120) NO vive aca: es dato y vive en modules/config/data.json
+  // (club_config.cupo_club en el backend). Una sola fuente; el dashboard la lee de ahi.
   aforo: { casi: number; lleno: number }
   checkinObjetivo: number
-  cupoClub: number
+  // Una membresia pasa a "por vencer" cuando faltan este numero de dias o menos para el vencimiento.
+  porVencerDias: number
 }
 
 export const forja: Theme = {
@@ -59,14 +62,14 @@ export const forja: Theme = {
     subtle: "#1A212B",
     success: "#2DD4BF", // teal frio: cobrado / activo (sin verde-tierra)
     warning: "#C6F24E", // volt-lime: casi lleno / por vencer
-    // magenta: lleno / vencido (pulsa). Aclarado desde #EC3B8A (mismo tono, 333 grados)
+    // magenta: lleno / vencido / rechazado. Aclarado desde #EC3B8A (mismo tono, 333 grados)
     // para que el chip tintado (bg-danger/15) llegue a 4.5:1 sobre surface.
     danger: "#F060A0",
     info: "#22D3EE", // cian: espacio / recuperado
   },
   aforo: { casi: 0.6, lleno: 0.85 },
   checkinObjetivo: 520,
-  cupoClub: 120,
+  porVencerDias: 7,
 }
 
 export const theme: Theme = forja

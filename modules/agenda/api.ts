@@ -8,7 +8,7 @@ import raw from "./data.json"
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
 
-export type EstadoClase = "programada" | "en-curso" | "cancelada"
+export type EstadoClase = "programada" | "en-curso" | "finalizada" | "cancelada"
 
 export type ClaseAgenda = {
   id: string
@@ -23,8 +23,9 @@ export type ClaseAgenda = {
   estado: EstadoClase
 }
 
-// 19 clases de 06:00 a 21:00. Estados mezclados: en-curso, completas con
-// waitlist, una cancelada, otras con espacio de sobra.
+// 19 clases de 06:00 a 21:00. Estados coherentes con la hora (ahora son ~18:35): las de la
+// manana y la tarde ya finalizaron, 4 estan en curso, el resto programadas y una cancelada.
+// Hay completas con waitlist y otras con espacio de sobra.
 export async function getClasesHoy(): Promise<ClaseAgenda[]> {
   await sleep(300)
   return structuredClone(raw.clases) as ClaseAgenda[]

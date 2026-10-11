@@ -17,7 +17,8 @@ export type Socio = {
   plan: string
   estado: EstadoSocio
   ultimoCheckin: string
-  vencimiento: string
+  vencimiento: string | null // null si la membresia esta congelada: no hay vencimiento corriendo
+  descongela?: string // solo congelados: cuando se reactiva ("29 jul")
   email: string
   telefono: string
 }

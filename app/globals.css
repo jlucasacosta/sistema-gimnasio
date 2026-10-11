@@ -71,7 +71,7 @@
     gap: 0.25rem;
     border-radius: var(--badge-radius);
     padding: 0.125rem 0.625rem;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     line-height: 1.2rem;
     white-space: nowrap;
     font-family: var(--font-body);
@@ -83,7 +83,7 @@
     line-height: 0.9;
     letter-spacing: -0.02em;
   }
-  /* Barra de aforo: el relleno crece con el %. La transicion es el momento del clip. */
+  /* Barra de aforo: el relleno refleja el %. Estatica: sin transicion ni animacion. */
   .barra {
     position: relative;
     overflow: hidden;
@@ -97,7 +97,10 @@
     height: 100%;
     border-radius: 2px;
     transform-origin: left center;
-    transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  /* Clase COMPLETA: anillo magenta fijo alrededor de la barra (no pulsa). */
+  .completa {
+    box-shadow: 0 0 0 2px rgb(var(--danger) / 0.7);
   }
   /* Target tactil: en pantallas tactiles o angostas los controles llegan a 44px.
      En desktop con mouse se conserva la densidad compacta del sistema. */
@@ -111,54 +114,6 @@
       justify-content: center;
     }
   }
-}
-
-/* Una clase COMPLETA late en magenta: es el frame que se graba. */
-@keyframes latir {
-  0%, 100% { box-shadow: 0 0 0 0 rgb(var(--danger) / 0.55); }
-  50% { box-shadow: 0 0 0 8px rgb(var(--danger) / 0); }
-}
-.completa { animation: latir 1.4s ease-out infinite; }
-
-/* El hero-number de aforo respira: la sala esta viva ahora. */
-@keyframes respirar {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.88; }
-}
-.respira { animation: respirar 2.4s ease-in-out infinite; }
-
-/* El ticker de telemetria corre solo. */
-@keyframes correr {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-.ticker-track {
-  display: flex;
-  width: max-content;
-  animation: correr 34s linear infinite;
-}
-/* Pausable con mouse (hover) y con teclado (el contenedor es enfocable): WCAG 2.2.2. */
-.ticker-mask:hover .ticker-track,
-.ticker-mask:focus-within .ticker-track { animation-play-state: paused; }
-
-/* Reduced motion: se quita el MOVIMIENTO, no el estado. El cambio se sigue viendo:
-   - COMPLETO conserva un anillo magenta fijo en lugar del pulso.
-   - El ticker deja de correr y pasa a una fila que hace wrap con TODOS los datos
-     (sin la copia duplicada del loop).
-   - Las barras saltan al valor nuevo sin interpolar. */
-@media (prefers-reduced-motion: reduce) {
-  .respira, .barra-fill, .animate-pulse { animation: none; transition: none; }
-  .completa {
-    animation: none;
-    box-shadow: 0 0 0 2px rgb(var(--danger) / 0.7);
-  }
-  .ticker-track {
-    animation: none;
-    width: auto;
-    flex-wrap: wrap;
-    row-gap: 0.75rem;
-  }
-  .ticker-dup { display: none; }
 }
 
 html {
