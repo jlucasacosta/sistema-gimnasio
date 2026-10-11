@@ -88,7 +88,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {/* Debajo de md el chasis pasa a columna (barra superior); desde md, sidebar a la izquierda. */}
         <div className={"min-h-screen bg-bg text-fg flex flex-col " + (stacked ? "" : "md:flex-row")}>
           <Nav />
-          <main id="contenido" tabIndex={-1} className="min-w-0 flex-1 overflow-x-clip p-[var(--pad)] outline-none">
+          <main id="contenido" tabIndex={-1} className="relative min-w-0 flex-1 overflow-x-clip p-[var(--pad)] outline-none">
             {children}
           </main>
         </div>
